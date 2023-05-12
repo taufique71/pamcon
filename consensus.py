@@ -10,7 +10,7 @@ import scipy as sp
 from scipy import sparse
 import pandas as pd
 import uunet.multinet as ml
-import ClusterEnsembles as CE
+#import ClusterEnsembles as CE
 from sklearn.metrics.cluster import adjusted_rand_score
 from sklearn.metrics.cluster import normalized_mutual_info_score
 import matplotlib
@@ -257,6 +257,7 @@ def lf_consensus(P_list):
     P_star = { "graph": nx.Graph(Ga), "partition": list(clust_lst)}
     return P_star
 
+"""
 def hbgf_solution(P_list):
     k = len(P_list)
     n = 0
@@ -269,4 +270,5 @@ def hbgf_solution(P_list):
     cons_lst = clust_asn_to_lst(cons_asn)
     P_star = {"graph": None, "partition": list(cons_lst)}
     return P_star
+"""
 
