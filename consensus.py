@@ -9,25 +9,12 @@ import numpy as np
 import scipy as sp
 from scipy import sparse
 import pandas as pd
-import uunet.multinet as ml
-#import ClusterEnsembles as CE
-from sklearn.metrics.cluster import adjusted_rand_score
-from sklearn.metrics.cluster import normalized_mutual_info_score
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-import os
-from pathlib import Path
-import json
-from subprocess import Popen, PIPE
-import subprocess
-import time
-import sys
-import itertools
+#import ensembleclustering as CE
 import random
 import math
 from utils import *
 from distances import *
+
 
 def gen_batches(P_list, batch_size):
     P_list_shuffled = list(P_list)
@@ -131,7 +118,7 @@ def markov_consensus(P_star, P_list):
     #axes[axr][2].imshow(Acc)
     #axes[axr][2].set_title("Acc(it)")
     
-    A_markov = markov_diffusion(Acc, 1.2, 0.0001, 5)
+    A_markov = markov_diffusion(Acc, 1.2, 0.0001, 10)
     A_markov = A_markov.transpose()
     #G_markov = nx.from_numpy_array(A_markov, create_using=nx.DiGraph)
     G_markov = nx.DiGraph()
