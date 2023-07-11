@@ -84,15 +84,18 @@ def clust_lst_to_asn(clust_lst, nelem=None):
     if nelem == None:
         nelem = 0
         for l in clust_lst:
-            nelem = nelem + len(l)
+            nelem = nelem + len(l)   
+    
+    clust_map = clust_lst_to_map(clust_lst)
+    keys = list(clust_map.keys())
+    keys.sort(key=int)
     
     clust_asn = [-1] * nelem
-    for l in range(len(clust_lst)):
-        for e in clust_lst[l]:
-            try:
-                clust_asn[int(e)] = l
-            except:
-                print("[clust_lst_to_asn]", e, "is out of array limit")
+    i = 0
+    while i < nelem:
+        clust_asn[i] = clust_map[keys[i]]
+        i = i + 1
+        
     return clust_asn
 
 # print(clust_lst_to_asn([[0,1,3], [2,5], [4]]))

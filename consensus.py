@@ -9,7 +9,7 @@ import numpy as np
 import scipy as sp
 from scipy import sparse
 import pandas as pd
-#import ensembleclustering as CE
+import ensembleclustering as CE
 import random
 import math
 from utils import *
@@ -159,7 +159,7 @@ def iterative_consensus(P_list, n_iter=10, batch_size=1, distance=split_joint_di
             P_list[i]["graph"] = P_list[i]["graph"].to_directed()
      
     # If no initial solution is given randomly pick an item from C as initial solution
-    random.seed(123)
+    #random.seed(123)
     P_star = random.choice(P_list)
     
     P_prev = P_star
@@ -226,7 +226,11 @@ def iterative_consensus(P_list, n_iter=10, batch_size=1, distance=split_joint_di
             print("batch: ", b, ": distance to previous solution:", d, ", #cluster:", len(P_star["partition"]))
     return P_star
 
+# Lancichinetti, A., & Fortunato, S.
+# Consensus clustering in complex networks. 
+# Scientific reports, 2(1), 1-7. (2012)
 def lf_consensus(P_list):
+    #print("lf_consensus")
     k = len(P_list)
     n = 0
     for cluster in P_list[0]["partition"]:
@@ -239,15 +243,24 @@ def lf_consensus(P_list):
                     idxi = int(clust[i])
                     idxj = int(clust[j])
                     adj_mat[idxi, idxj] = adj_mat[idxi, idxj] + 1
-    Ga = nx.from_numpy_matrix(adj_mat)
-    clust_lst = nx_comm.louvain_communities(Ga, seed=123)
+    filter_mat = nx.to_numpy_array(P_list[0]["graph"])
+    nz_rows, nz_cols = np.nonzero(filter_mat)
+    adj_mat_target = np.zeros((n,n))
+    for i in range(nz_rows.shape[0]):
+        adj_mat_target[nz_rows[i], nz_cols[i]] = adj_mat[nz_rows[i], nz_cols[i]] # Need to figure out better way to do it
+    Ga = nx.from_numpy_matrix(adj_mat_target)
+    clust_lst = nx_comm.louvain_communities(Ga, weight="weight", seed=123)
     P_star = { "graph": nx.Graph(Ga), "partition": list(clust_lst)}
     return P_star
 
-"""
-def hbgf_solution(P_list):
+# X. Z. Fern and C. E. Brodley, 
+# "Solving cluster ensemble problems by bipartite graph partitioning," 
+# In Proceedings of the Twenty-First International Conference on Machine Learning, p. 36, 2004.
+def hbgf_consensus(P_list):
     k = len(P_list)
     n = 0
+    for cluster in P_list[0]["partition"]:
+        n =  n + len(cluster)
     label_matrix = np.full((n, k), -1)
     for e in range(k):
         P = P_list[e]
@@ -257,5 +270,64 @@ def hbgf_solution(P_list):
     cons_lst = clust_asn_to_lst(cons_asn)
     P_star = {"graph": None, "partition": list(cons_lst)}
     return P_star
-"""
 
+# A. Strehl and J. Ghosh, 
+# "Cluster ensembles -- a knowledge reuse framework for combining multiple partitions," 
+# Journal of Machine Learning Research, vol. 3, pp. 583-617, 2002.
+def mcla_consensus(P_list):
+    k = len(P_list)
+    n = 0
+    for cluster in P_list[0]["partition"]:
+        n =  n + len(cluster)
+    label_matrix = np.full((n, k), -1)
+    for e in range(k):
+        P = P_list[e]
+        clust_asn = clust_lst_to_asn(P["partition"], nelem=n)
+        label_matrix[:,e] = np.array(clust_asn)
+    cons_asn = CE.cluster_ensembles(np.transpose(label_matrix), solver="mcla")
+    cons_lst = clust_asn_to_lst(cons_asn)
+    P_star = {"graph": None, "partition": list(cons_lst)}
+    return P_star
+
+# T. Li, C. Ding, and M. I. Jordan, 
+# "Solving consensus and semi-supervised clustering problems using nonnegative matrix factorization," 
+# In Proceedings of the Seventh IEEE International Conference on Data Mining, pp. 577-582, 2007.
+def nmf_consensus(P_list):
+    k = len(P_list)
+    n = 0
+    for cluster in P_list[0]["partition"]:
+        n =  n + len(cluster)
+    label_matrix = np.full((n, k), -1)
+    for e in range(k):
+        P = P_list[e]
+        clust_asn = clust_lst_to_asn(P["partition"], nelem=n)
+        label_matrix[:,e] = np.array(clust_asn)
+    cons_asn = CE.cluster_ensembles(np.transpose(label_matrix), solver="nmf")
+    cons_lst = clust_asn_to_lst(cons_asn)
+    P_star = {"graph": None, "partition": list(cons_lst)}
+    return P_star
+
+
+def best_candidate_consensus(P_list, distance=split_joint_distance):
+    k = len(P_list)
+    n = 0
+    best_candidate = None
+    best_dist_total = 1000000000.0 #Max number
+    for i in range(k):
+        dist = []
+        for j in range(k):
+            d = distance(P_list[i]["partition"], P_list[j]["partition"])
+            #print("[best_candidate_consensus]", len(P_list[i]["partition"]), len(P_list[j]["partition"]), d)
+            dist.append(d)
+        dist = np.array(dist)
+        dist_total = np.sum(dist)
+        dist_mean = np.mean(dist)
+        dist_std = np.std(dist)
+        dist_med = np.median(dist)
+        #print("[best_candidate_consensus]", dist_total)
+        if dist_total < best_dist_total:
+            #print("[best_candidate_consensus] Updating best candidate", dist_total)
+            best_candidate = P_list[i]["partition"]
+            best_dist_total = dist_total
+    P_star = { "graph": None, "partition": list(best_candidate)}
+    return P_star
