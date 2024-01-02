@@ -1,4 +1,2 @@
+__pycache__/
 .ipynb_checkpoints/
-*.o
-*.swp
-v8-cpp
