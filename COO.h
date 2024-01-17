@@ -1,7 +1,6 @@
 //
 //  COO.h
 //
-//
 
 #ifndef COO_h
 #define COO_h
@@ -18,8 +17,6 @@
 #include "GAP/pvector.h"
 #include "GAP/platform_atomics.h"
 #include "NIST/mmio.h"
-#include "CSC.h"
-
 
 // RIT: Row Index Type
 // CIT: Column Index Type
@@ -54,33 +51,6 @@ public:
         nzVals_ = std::move(*(nzVals));
     }
 
-    //// Convert CSC to COO
-    //COO(CSC<RIT, VT, CIT> *csc){
-        //auto csc_colPtr = csc->get_colPtr();   
-        //auto csc_rowIds = csc->get_rowIds();   
-        //auto csc_nzVals = csc->get_nzVals();   
-        
-        //nrows_ = csc->get_nrows();
-        //ncols_ = csc->get_ncols();
-        //nnz_ = csc->get_nnz();
-
-        //nzRows_.resize(nnz_);
-        //nzCols_.resize(nnz_);
-        //nzVals_.resize(nnz_);
-
-        //auto idx = 0;
-        //for (auto i = 0; i < ncols_; i++){
-            //for(auto j = (*csc_colPtr)[i]; j < (*csc_colPtr)[i+1], j++){
-                //nzRows_[idx] = (*csc_rowIds)[j];
-                //nzVals_[idx] = (*csc_nzVals)[j];
-                //nzCols_[idx] = i;
-                //idx++
-            //}
-        //}
-
-        //isWeighted_ = csc->isWeighted();
-        //sortType_ = csc->isColSorted();
-    //}
     // MTH: Need a copy constructor
 
 
@@ -149,39 +119,17 @@ public:
     template<typename CPT>
     void BinByCol(pvector<CPT>& colPtr, pvector<RIT>& rowIdsBinned, pvector<VT>& nzValsBinned);
 
+    void transpose();
 
     void nz_rows_pvector(pvector<RIT>* row_pointer) { nzRows_ = std::move((*row_pointer));} // added by abhishek
     void nz_cols_pvector(pvector<CIT>* column_pointer) {nzCols_ = std::move((*column_pointer));}
     void nz_vals_pvector(pvector<VT>* value_pointer) {nzVals_ = std::move((* value_pointer));}
-    
-    void print_all(); // added by abhishek
-
-    
 };
 
 template <typename RIT, typename CIT, typename VT>
 void COO<RIT, CIT, VT>::PrintInfo()
 {
     std::cout << "COO matrix: " << " Rows= " << nrows_  << " Columns= " << ncols_ << " nnz= " << nnz_ << std::endl;
-}
-
-template <typename RIT, typename CIT, typename VT>
-void COO<RIT, CIT, VT>::print_all()
-{
-    std::cout << "COO matrix: " << " Rows= " << nrows_  << " Columns= " << ncols_ << " nnz= " << nnz_ << std::endl<<"nz_values"<<std::endl;
-    for(size_t i = 0; i < nzVals_.size(); i++){
-        std::cout<<nzVals_[i] << " ";
-    }
-    std::cout<<std::endl<<"row_correspondents"<<std::endl;
-    for(size_t i = 0; i < nzRows_.size(); i++){
-        std::cout<<nzRows_[i] << " ";
-    }
-    std::cout<<std::endl<<"column_correspondents"<<std::endl;
-    for(size_t i = 0; i < nzCols_.size(); i++){
-        std::cout<<nzCols_[i] << " ";
-    }
-    std::cout<<std::endl;
-
 }
 
 template <typename RIT, typename CIT, typename VT>
@@ -196,7 +144,6 @@ pvector<CIT> COO<RIT, CIT, VT>:: NnzPerRow()
     }
     return nnzPerRow;
 }
-
 
 template <typename RIT, typename CIT, typename VT>
 pvector<RIT> COO<RIT, CIT, VT>:: NnzPerCol()
@@ -496,6 +443,16 @@ void COO<RIT, CIT, VT>::GenRMAT(int scale, int d, bool isWeighted, int64_t kRand
     //PrintTime("RMAT Generation Time", t.Seconds());
 }
 
+template <typename RIT, typename CIT, typename VT>
+void COO<RIT, CIT, VT>::transpose()
+{
+    for(auto i = 0; i < nnz_; i++){
+        RIT tmp = nzRows_[i];
+        nzRows_[i] = (RIT)nzCols_[i];
+        nzCols_[i] = (CIT)tmp;
+    }
+    sortType_ = UNSORTED; // Not sorted anymore after swapping row and column ids of non-zero entries 
+}
 
 
 

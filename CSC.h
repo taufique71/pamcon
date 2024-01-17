@@ -85,7 +85,6 @@ public:
     
     bool operator== (const CSC<RIT, VT, CPT> & other);
 
-
 	size_t get_ncols();
 	size_t get_nrows();
 	size_t get_nnz() ;
@@ -95,13 +94,15 @@ public:
 	void nz_rows_pvector(pvector<RIT>* row_pointer) { rowIds_ = std::move(*(row_pointer));} // added by abhishek
 	void cols_pvector(pvector<CPT>* column_pointer) {colPtr_ = std::move(*(column_pointer));}
 	void nz_vals_pvector(pvector<VT>* value_pointer) {nzVals_ = std::move(*(value_pointer));}
-
+    
 	void count_sort(pvector<std::pair<RIT, VT> >& all_elements, size_t expon); // added by abhishek
 	void sort_inside_column();
-
-	void print_all(); // added by abhishek
     
     void column_split(std::vector< CSC<RIT, VT, CPT>* > &vec, int nsplit);
+
+    template <typename CIT>
+    COO<RIT, CIT, VT> to_COO();
+
 private:
 	size_t nrows_;
 	size_t ncols_;
@@ -157,47 +158,6 @@ size_t CSC<RIT, VT, CPT>:: get_nnz()
 {
 	return nnz_;
 }
-
-template <typename RIT, typename VT, typename CPT>
-void CSC<RIT, VT, CPT>::print_all()
-{
-	//std::cout << "CSC matrix: " << " Rows= " << nrows_  << " Columns= " << ncols_ << " nnz= " << nnz_ << std::endl<<"column_pointer_array"<<std::endl;
-	std::cout<< nrows_<<" "<<ncols_<<" "<<nnz_<<std::endl;
-	
-	for(size_t i = 0; i < colPtr_.size(); i++){
-		std::cout<<colPtr_[i];
-		if(i != ncols_){
-			std::cout<<" ";
-		}else{
-			std::cout<<std::endl;
-		}
-	}
-	//std::cout<<std::endl;
-	//std::cout<<std::endl<<"row_correspondents"<<std::endl;
-	for(size_t i = 0; i < rowIds_.size(); i++){
-		std::cout<<rowIds_[i];
-		if(i != nnz_-1){
-			std::cout<<" ";
-		}else{
-			std::cout<<std::endl;
-		}
-	}
-	//std::cout<<std::endl;
-	//std::cout<<std::endl<<"nz_values"<<std::endl;
-	for(size_t i = 0; i < nzVals_.size(); i++){
-		std::cout<<nzVals_[i];
-		if(i != nnz_-1){
-			std::cout<<" ";
-		}else{
-			std::cout<<std::endl;
-		}
-	}
-	
-	//std::cout<<std::endl;
-
-}
-
-
 
 //TODO: need parallel code
 template <typename RIT, typename VT, typename CPT>
@@ -429,5 +389,25 @@ void CSC<RIT, VT, CPT>::column_split(std::vector< CSC<RIT, VT, CPT>* > &vec, int
     }
 }
 
+template <typename RIT, typename VT, typename CPT>
+template <typename CIT>
+COO<RIT, CIT, VT> CSC<RIT, VT, CPT>::to_COO(){
+        pvector<RIT> coo_nzRows(nnz_);
+        pvector<CIT> coo_nzCols(nnz_);
+        pvector<VT> coo_nzVals(nnz_);
+
+
+        auto idx = 0;
+        for (auto i = 0; i < ncols_; i++){
+            for(auto j = colPtr_[i]; j < colPtr_[i+1]; j++){
+                coo_nzRows[idx] = rowIds_[j];
+                coo_nzVals[idx] = nzVals_[j];
+                coo_nzCols[idx] = i;
+                idx++;
+            }
+        }
+
+        return COO<RIT,CIT,VT> (nrows_, ncols_, nnz_, &coo_nzRows, &coo_nzCols, &coo_nzVals, isWeighted_);
+}
 
 #endif
