@@ -1,0 +1,72 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 2.465709 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 2.409642 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 2.525613 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 2.683274 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 10.213606 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 9.095182 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 14.556169 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.
+Number of input clusterings: 36
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 13.557669 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 49.100023 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 48.875145 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 48.071386 seconds
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.saoem
+Algorithm to use: saoem
+SAOEM: 5.452994 seconds

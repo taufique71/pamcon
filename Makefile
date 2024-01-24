@@ -1,8 +1,11 @@
+LOCAL_HOME_DIR = /home/mth
 PROJECT_DIR = $(HOME)/Codes/graph-consensus-clustering
 NIST_DIR = $(PROJECT_DIR)/NIST
 CONPAS_DIR = $(PROJECT_DIR)/CONPAS
+IGRAPH_DIR = $(LOCAL_HOME_DIR)/Software/igraph-0.10.6/install
 
 CFLAGS = -std=c++11 -O3 -fopenmp -fpermissive -ffast-math -fomit-frame-pointer -msse -mmmx  
+#CFLAGS = -std=c++11 -g -O0 -fopenmp -fpermissive -ffast-math -fomit-frame-pointer -msse -mmmx  
 CC = g++ 
 
 AdjBestOfK.o : $(CONPAS_DIR)/AdjBestOfK.cpp $(CONPAS_DIR)/AdjBestOfK.h $(CONPAS_DIR)/CCHeuristic.h
@@ -44,14 +47,22 @@ RefinedClustering.o : $(CONPAS_DIR)/RefinedClustering.h $(CONPAS_DIR)/RefinedClu
 mmio.o: $(NIST_DIR)/mmio.c
 	$(CC) $(CFLAGS) -c -o mmio.o $(NIST_DIR)/mmio.c
 
-main.o: main.cpp
-	$(CC) $(CFLAGS) -c -o main.o main.cpp
+consensus.o: consensus.cpp
+	$(CC) $(CFLAGS) -c -o consensus.o consensus.cpp
 
-consensus: main.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
+consensus: consensus.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
 	$(CC) $(CFLAGS) -o consensus *.o
 
-all: consensus
+dist-distribution: dist-distribution.cpp
+	$(CC) $(CFLAGS) dist-distribution.cpp \
+		-I$(IGRAPH_DIR)/include/igraph \
+		-L$(IGRAPH_DIR)/lib \
+		-ligraph -lm -larpack \
+		-o dist-distribution
+
+all: consensus dist-distribution
 
 clean:
 	rm -f *.o
 	rm -f consensus
+	rm -f dist-distribution 

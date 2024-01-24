@@ -1,0 +1,1080 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu01_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 200 Columns= 200 nnz= 993
+Time to read input graph: 0.002129
+Directed
+Time to make undirected: 0.000180
+Time to read input clusterings: 0.034980
+Time to prepare cluster assignment matrix: 0.000056
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.000378
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1924
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000109
+[parallel_consensus_v8]		Number of edges to probe 1862
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000007
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000060
+[parallel_consensus_v8]		Number of valid moves 200
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 179
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 179
+[parallel_consensus_v8]	Time for vertex movement 0.000015
+[parallel_consensus_v8]	Number of clusters 76
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000101
+[parallel_consensus_v8]		Number of edges to probe 987
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000025
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000204
+[parallel_consensus_v8]		Number of valid moves 144
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 137
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 137
+[parallel_consensus_v8]	Time for vertex movement 0.000008
+[parallel_consensus_v8]	Number of clusters 24
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000055
+[parallel_consensus_v8]		Number of edges to probe 421
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000083
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000143
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 16
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000042
+[parallel_consensus_v8]		Number of edges to probe 336
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000089
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000151
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000006
+[parallel_consensus_v8]	Number of clusters 16
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000038
+[parallel_consensus_v8]		Number of edges to probe 336
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000092
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000151
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.001905
+[parallel_consensus_v8]		tInit 0.000008
+[parallel_consensus_v8]		tSearch 0.001351
+[parallel_consensus_v8]		tValidate 0.000010
+[parallel_consensus_v8]		tMove 0.000036
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu02_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1008
+Time to read input graph: 0.002191
+Directed
+Time to make undirected: 0.000176
+Time to read input clusterings: 0.038782
+Time to prepare cluster assignment matrix: 0.000024
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.000398
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1957
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000110
+[parallel_consensus_v8]		Number of edges to probe 1898
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000006
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000066
+[parallel_consensus_v8]		Number of valid moves 200
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 166
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 166
+[parallel_consensus_v8]	Time for vertex movement 0.000015
+[parallel_consensus_v8]	Number of clusters 91
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000104
+[parallel_consensus_v8]		Number of edges to probe 1307
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000017
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000101
+[parallel_consensus_v8]		Number of valid moves 152
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 145
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 145
+[parallel_consensus_v8]	Time for vertex movement 0.000009
+[parallel_consensus_v8]	Number of clusters 31
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000076
+[parallel_consensus_v8]		Number of edges to probe 623
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000068
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000186
+[parallel_consensus_v8]		Number of valid moves 34
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 34
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 34
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 16
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000055
+[parallel_consensus_v8]		Number of edges to probe 466
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000101
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000226
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000006
+[parallel_consensus_v8]	Number of clusters 16
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000051
+[parallel_consensus_v8]		Number of edges to probe 466
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000100
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000224
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.002068
+[parallel_consensus_v8]		tInit 0.000008
+[parallel_consensus_v8]		tSearch 0.001490
+[parallel_consensus_v8]		tValidate 0.000011
+[parallel_consensus_v8]		tMove 0.000037
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu03_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1031
+Time to read input graph: 0.001946
+Directed
+Time to make undirected: 0.000177
+Time to read input clusterings: 0.033231
+Time to prepare cluster assignment matrix: 0.000025
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.000415
+CSC matrix:  Rows= 200 Columns= 200 nnz= 2012
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000114
+[parallel_consensus_v8]		Number of edges to probe 1962
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000005
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000069
+[parallel_consensus_v8]		Number of valid moves 200
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 163
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 163
+[parallel_consensus_v8]	Time for vertex movement 0.000015
+[parallel_consensus_v8]	Number of clusters 90
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000104
+[parallel_consensus_v8]		Number of edges to probe 1412
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000021
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000125
+[parallel_consensus_v8]		Number of valid moves 146
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 135
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 135
+[parallel_consensus_v8]	Time for vertex movement 0.000009
+[parallel_consensus_v8]	Number of clusters 40
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000091
+[parallel_consensus_v8]		Number of edges to probe 930
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000056
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000227
+[parallel_consensus_v8]		Number of valid moves 59
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 56
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 56
+[parallel_consensus_v8]	Time for vertex movement 0.000008
+[parallel_consensus_v8]	Number of clusters 20
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000076
+[parallel_consensus_v8]		Number of edges to probe 694
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000098
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000299
+[parallel_consensus_v8]		Number of valid moves 8
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 7
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 7
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 18
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000073
+[parallel_consensus_v8]		Number of edges to probe 685
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000097
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000310
+[parallel_consensus_v8]		Number of valid moves 2
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 2
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 2
+[parallel_consensus_v8]	Time for vertex movement 0.000006
+[parallel_consensus_v8]	Number of clusters 17
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000073
+[parallel_consensus_v8]		Number of edges to probe 678
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000099
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000299
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000006
+[parallel_consensus_v8]	Number of clusters 17
+[parallel_consensus_v8] >>> Iteration: 7
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000072
+[parallel_consensus_v8]		Number of edges to probe 678
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000099
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000299
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.003351
+[parallel_consensus_v8]		tInit 0.000008
+[parallel_consensus_v8]		tSearch 0.002706
+[parallel_consensus_v8]		tValidate 0.000015
+[parallel_consensus_v8]		tMove 0.000051
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n200/LFR_n200_mu04_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1047
+Time to read input graph: 0.001944
+Directed
+Time to make undirected: 0.000178
+Time to read input clusterings: 0.031094
+Time to prepare cluster assignment matrix: 0.000046
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.000471
+CSC matrix:  Rows= 200 Columns= 200 nnz= 2050
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000115
+[parallel_consensus_v8]		Number of edges to probe 2006
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000005
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000081
+[parallel_consensus_v8]		Number of valid moves 199
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 159
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 159
+[parallel_consensus_v8]	Time for vertex movement 0.000015
+[parallel_consensus_v8]	Number of clusters 98
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000107
+[parallel_consensus_v8]		Number of edges to probe 1590
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000019
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000144
+[parallel_consensus_v8]		Number of valid moves 127
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 119
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 119
+[parallel_consensus_v8]	Time for vertex movement 0.000010
+[parallel_consensus_v8]	Number of clusters 45
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000099
+[parallel_consensus_v8]		Number of edges to probe 1181
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000055
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000276
+[parallel_consensus_v8]		Number of valid moves 57
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 53
+[parallel_consensus_v8]	Time for second validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 53
+[parallel_consensus_v8]	Time for vertex movement 0.000008
+[parallel_consensus_v8]	Number of clusters 30
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000092
+[parallel_consensus_v8]		Number of edges to probe 987
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000093
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000345
+[parallel_consensus_v8]		Number of valid moves 15
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 15
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 15
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 24
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000089
+[parallel_consensus_v8]		Number of edges to probe 936
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000103
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000363
+[parallel_consensus_v8]		Number of valid moves 4
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 4
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 4
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 24
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000089
+[parallel_consensus_v8]		Number of edges to probe 939
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000103
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000360
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 23
+[parallel_consensus_v8] >>> Iteration: 7
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000087
+[parallel_consensus_v8]		Number of edges to probe 928
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000105
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000368
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000007
+[parallel_consensus_v8]	Number of clusters 23
+[parallel_consensus_v8] >>> Iteration: 8
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000088
+[parallel_consensus_v8]		Number of edges to probe 928
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000105
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000369
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000000
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.004402
+[parallel_consensus_v8]		tInit 0.000008
+[parallel_consensus_v8]		tSearch 0.003658
+[parallel_consensus_v8]		tValidate 0.000016
+[parallel_consensus_v8]		tMove 0.000062
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu01_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 9609
+Time to read input graph: 0.004282
+Directed
+Time to make undirected: 0.000470
+Time to read input clusterings: 0.035199
+Time to prepare cluster assignment matrix: 0.000128
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.002970
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 18851
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000862
+[parallel_consensus_v8]		Number of edges to probe 18484
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000008
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000523
+[parallel_consensus_v8]		Number of valid moves 1000
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 856
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 856
+[parallel_consensus_v8]	Time for vertex movement 0.000065
+[parallel_consensus_v8]	Number of clusters 381
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000902
+[parallel_consensus_v8]		Number of edges to probe 9774
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000096
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000911
+[parallel_consensus_v8]		Number of valid moves 784
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 770
+[parallel_consensus_v8]	Time for second validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 770
+[parallel_consensus_v8]	Time for vertex movement 0.000038
+[parallel_consensus_v8]	Number of clusters 64
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000445
+[parallel_consensus_v8]		Number of edges to probe 3333
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000595
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.001911
+[parallel_consensus_v8]		Number of valid moves 153
+[parallel_consensus_v8]	Time for first validation pass 0.000003
+[parallel_consensus_v8]		Number of valid moves 151
+[parallel_consensus_v8]	Time for second validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 151
+[parallel_consensus_v8]	Time for vertex movement 0.000022
+[parallel_consensus_v8]	Number of clusters 38
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000280
+[parallel_consensus_v8]		Number of edges to probe 2673
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000740
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.002138
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000020
+[parallel_consensus_v8]	Number of clusters 38
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000276
+[parallel_consensus_v8]		Number of edges to probe 2673
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000740
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.002128
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.016451
+[parallel_consensus_v8]		tInit 0.000036
+[parallel_consensus_v8]		tSearch 0.012556
+[parallel_consensus_v8]		tValidate 0.000048
+[parallel_consensus_v8]		tMove 0.000145
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu02_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 9791
+Time to read input graph: 0.004231
+Directed
+Time to make undirected: 0.000478
+Time to read input clusterings: 0.036906
+Time to prepare cluster assignment matrix: 0.000080
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.003179
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 19311
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000883
+[parallel_consensus_v8]		Number of edges to probe 19040
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000008
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000579
+[parallel_consensus_v8]		Number of valid moves 1000
+[parallel_consensus_v8]	Time for first validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 840
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 840
+[parallel_consensus_v8]	Time for vertex movement 0.000069
+[parallel_consensus_v8]	Number of clusters 423
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000947
+[parallel_consensus_v8]		Number of edges to probe 13010
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000080
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.001142
+[parallel_consensus_v8]		Number of valid moves 818
+[parallel_consensus_v8]	Time for first validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 792
+[parallel_consensus_v8]	Time for second validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 792
+[parallel_consensus_v8]	Time for vertex movement 0.000042
+[parallel_consensus_v8]	Number of clusters 85
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000621
+[parallel_consensus_v8]		Number of edges to probe 6467
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000565
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.003555
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for first validation pass 0.000003
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for second validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for vertex movement 0.000022
+[parallel_consensus_v8]	Number of clusters 38
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000461
+[parallel_consensus_v8]		Number of edges to probe 5430
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000785
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.004439
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000021
+[parallel_consensus_v8]	Number of clusters 38
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000462
+[parallel_consensus_v8]		Number of edges to probe 5430
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000790
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.004361
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.023857
+[parallel_consensus_v8]		tInit 0.000036
+[parallel_consensus_v8]		tSearch 0.019678
+[parallel_consensus_v8]		tValidate 0.000046
+[parallel_consensus_v8]		tMove 0.000153
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu03_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 10049
+Time to read input graph: 0.004371
+Directed
+Time to make undirected: 0.000486
+Time to read input clusterings: 0.037185
+Time to prepare cluster assignment matrix: 0.000079
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.003335
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 19887
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000901
+[parallel_consensus_v8]		Number of edges to probe 19676
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000008
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000602
+[parallel_consensus_v8]		Number of valid moves 997
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 862
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 862
+[parallel_consensus_v8]	Time for vertex movement 0.000069
+[parallel_consensus_v8]	Number of clusters 423
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000986
+[parallel_consensus_v8]		Number of edges to probe 14925
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000076
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.001367
+[parallel_consensus_v8]		Number of valid moves 806
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 789
+[parallel_consensus_v8]	Time for second validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 789
+[parallel_consensus_v8]	Time for vertex movement 0.000042
+[parallel_consensus_v8]	Number of clusters 95
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000737
+[parallel_consensus_v8]		Number of edges to probe 8945
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000570
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.004949
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for first validation pass 0.000003
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for second validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 162
+[parallel_consensus_v8]	Time for vertex movement 0.000025
+[parallel_consensus_v8]	Number of clusters 42
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000688
+[parallel_consensus_v8]		Number of edges to probe 7848
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000792
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.006213
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for vertex movement 0.000021
+[parallel_consensus_v8]	Number of clusters 42
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000625
+[parallel_consensus_v8]		Number of edges to probe 7845
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000794
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.006224
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for vertex movement 0.000021
+[parallel_consensus_v8]	Number of clusters 41
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000619
+[parallel_consensus_v8]		Number of edges to probe 7840
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000795
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.006321
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000022
+[parallel_consensus_v8]	Number of clusters 41
+[parallel_consensus_v8] >>> Iteration: 7
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000617
+[parallel_consensus_v8]		Number of edges to probe 7840
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000791
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.006227
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.045515
+[parallel_consensus_v8]		tInit 0.000038
+[parallel_consensus_v8]		tSearch 0.040903
+[parallel_consensus_v8]		tValidate 0.000056
+[parallel_consensus_v8]		tMove 0.000199
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.
+Number of input clusterings: 36
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n1000/LFR_n1000_mu04_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 10220
+Time to read input graph: 0.004377
+Directed
+Time to make undirected: 0.000476
+Time to read input clusterings: 0.037218
+Time to prepare cluster assignment matrix: 0.000073
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.003492
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 20265
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000926
+[parallel_consensus_v8]		Number of edges to probe 20090
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000008
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.000624
+[parallel_consensus_v8]		Number of valid moves 989
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 829
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 829
+[parallel_consensus_v8]	Time for vertex movement 0.000072
+[parallel_consensus_v8]	Number of clusters 459
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000988
+[parallel_consensus_v8]		Number of edges to probe 16877
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000068
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.001402
+[parallel_consensus_v8]		Number of valid moves 800
+[parallel_consensus_v8]	Time for first validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 778
+[parallel_consensus_v8]	Time for second validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 778
+[parallel_consensus_v8]	Time for vertex movement 0.000049
+[parallel_consensus_v8]	Number of clusters 150
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000865
+[parallel_consensus_v8]		Number of edges to probe 12059
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000429
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.004961
+[parallel_consensus_v8]		Number of valid moves 291
+[parallel_consensus_v8]	Time for first validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 287
+[parallel_consensus_v8]	Time for second validation pass 0.000007
+[parallel_consensus_v8]		Number of valid moves 287
+[parallel_consensus_v8]	Time for vertex movement 0.000028
+[parallel_consensus_v8]	Number of clusters 68
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000762
+[parallel_consensus_v8]		Number of edges to probe 10041
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000776
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.007365
+[parallel_consensus_v8]		Number of valid moves 32
+[parallel_consensus_v8]	Time for first validation pass 0.000002
+[parallel_consensus_v8]		Number of valid moves 31
+[parallel_consensus_v8]	Time for second validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 31
+[parallel_consensus_v8]	Time for vertex movement 0.000022
+[parallel_consensus_v8]	Number of clusters 60
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000742
+[parallel_consensus_v8]		Number of edges to probe 9859
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000820
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.007697
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 1
+[parallel_consensus_v8]	Time for vertex movement 0.000023
+[parallel_consensus_v8]	Number of clusters 60
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000743
+[parallel_consensus_v8]		Number of edges to probe 9856
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000821
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.010512
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000005
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000027
+[parallel_consensus_v8]	Number of clusters 60
+[parallel_consensus_v8] >>> Iteration: 7
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.000747
+[parallel_consensus_v8]		Number of edges to probe 9856
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.001917
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.007788
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000001
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000004
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.055881
+[parallel_consensus_v8]		tInit 0.000037
+[parallel_consensus_v8]		tSearch 0.050960
+[parallel_consensus_v8]		tValidate 0.000061
+[parallel_consensus_v8]		tMove 0.000221
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu01_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 48950
+Time to read input graph: 0.016095
+Directed
+Time to make undirected: 0.001865
+Time to read input clusterings: 0.051384
+Time to prepare cluster assignment matrix: 0.000403
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.015556
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 96010
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004325
+[parallel_consensus_v8]		Number of edges to probe 94120
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000023
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.002718
+[parallel_consensus_v8]		Number of valid moves 5000
+[parallel_consensus_v8]	Time for first validation pass 0.000028
+[parallel_consensus_v8]		Number of valid moves 4328
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 4328
+[parallel_consensus_v8]	Time for vertex movement 0.000330
+[parallel_consensus_v8]	Number of clusters 1641
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004146
+[parallel_consensus_v8]		Number of edges to probe 41804
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000760
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.005681
+[parallel_consensus_v8]		Number of valid moves 3390
+[parallel_consensus_v8]	Time for first validation pass 0.000028
+[parallel_consensus_v8]		Number of valid moves 3333
+[parallel_consensus_v8]	Time for second validation pass 0.000033
+[parallel_consensus_v8]		Number of valid moves 3333
+[parallel_consensus_v8]	Time for vertex movement 0.000153
+[parallel_consensus_v8]	Number of clusters 285
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.001744
+[parallel_consensus_v8]		Number of edges to probe 15695
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003283
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.010847
+[parallel_consensus_v8]		Number of valid moves 307
+[parallel_consensus_v8]	Time for first validation pass 0.000009
+[parallel_consensus_v8]		Number of valid moves 305
+[parallel_consensus_v8]	Time for second validation pass 0.000031
+[parallel_consensus_v8]		Number of valid moves 305
+[parallel_consensus_v8]	Time for vertex movement 0.000103
+[parallel_consensus_v8]	Number of clusters 203
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.001399
+[parallel_consensus_v8]		Number of edges to probe 14175
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003551
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.011190
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 3
+[parallel_consensus_v8]	Time for vertex movement 0.000103
+[parallel_consensus_v8]	Number of clusters 201
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.001394
+[parallel_consensus_v8]		Number of edges to probe 14150
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003607
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.011194
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000019
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000100
+[parallel_consensus_v8]	Number of clusters 201
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.001389
+[parallel_consensus_v8]		Number of edges to probe 14150
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003524
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.011294
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000020
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.102663
+[parallel_consensus_v8]		tInit 0.000180
+[parallel_consensus_v8]		tSearch 0.082070
+[parallel_consensus_v8]		tValidate 0.000232
+[parallel_consensus_v8]		tMove 0.000788
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu02_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 50068
+Time to read input graph: 0.016080
+Directed
+Time to make undirected: 0.006822
+Time to read input clusterings: 0.059621
+Time to prepare cluster assignment matrix: 0.000437
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.016134
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 98575
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004546
+[parallel_consensus_v8]		Number of edges to probe 97014
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000026
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.003034
+[parallel_consensus_v8]		Number of valid moves 5000
+[parallel_consensus_v8]	Time for first validation pass 0.000030
+[parallel_consensus_v8]		Number of valid moves 4276
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 4276
+[parallel_consensus_v8]	Time for vertex movement 0.000371
+[parallel_consensus_v8]	Number of clusters 1913
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004760
+[parallel_consensus_v8]		Number of edges to probe 59290
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000558
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.007145
+[parallel_consensus_v8]		Number of valid moves 3785
+[parallel_consensus_v8]	Time for first validation pass 0.000028
+[parallel_consensus_v8]		Number of valid moves 3689
+[parallel_consensus_v8]	Time for second validation pass 0.000032
+[parallel_consensus_v8]		Number of valid moves 3689
+[parallel_consensus_v8]	Time for vertex movement 0.000197
+[parallel_consensus_v8]	Number of clusters 323
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.002794
+[parallel_consensus_v8]		Number of edges to probe 31855
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003410
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.021848
+[parallel_consensus_v8]		Number of valid moves 456
+[parallel_consensus_v8]	Time for first validation pass 0.000010
+[parallel_consensus_v8]		Number of valid moves 448
+[parallel_consensus_v8]	Time for second validation pass 0.000030
+[parallel_consensus_v8]		Number of valid moves 448
+[parallel_consensus_v8]	Time for vertex movement 0.000116
+[parallel_consensus_v8]	Number of clusters 206
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.002376
+[parallel_consensus_v8]		Number of edges to probe 29867
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003678
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.023562
+[parallel_consensus_v8]		Number of valid moves 10
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 10
+[parallel_consensus_v8]	Time for second validation pass 0.000022
+[parallel_consensus_v8]		Number of valid moves 10
+[parallel_consensus_v8]	Time for vertex movement 0.000104
+[parallel_consensus_v8]	Number of clusters 201
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.002366
+[parallel_consensus_v8]		Number of edges to probe 29808
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003833
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.023727
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000019
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000106
+[parallel_consensus_v8]	Number of clusters 201
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.002361
+[parallel_consensus_v8]		Number of edges to probe 29808
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003698
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.023579
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.159053
+[parallel_consensus_v8]		tInit 0.000187
+[parallel_consensus_v8]		tSearch 0.137300
+[parallel_consensus_v8]		tValidate 0.000236
+[parallel_consensus_v8]		tMove 0.000893
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu03_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 51119
+Time to read input graph: 0.016515
+Directed
+Time to make undirected: 0.001958
+Time to read input clusterings: 0.051917
+Time to prepare cluster assignment matrix: 0.000348
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.017084
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 101040
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004595
+[parallel_consensus_v8]		Number of edges to probe 99842
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000022
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.003128
+[parallel_consensus_v8]		Number of valid moves 4991
+[parallel_consensus_v8]	Time for first validation pass 0.000030
+[parallel_consensus_v8]		Number of valid moves 4232
+[parallel_consensus_v8]	Time for second validation pass 0.000022
+[parallel_consensus_v8]		Number of valid moves 4232
+[parallel_consensus_v8]	Time for vertex movement 0.000376
+[parallel_consensus_v8]	Number of clusters 2132
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004986
+[parallel_consensus_v8]		Number of edges to probe 75161
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000382
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.007390
+[parallel_consensus_v8]		Number of valid moves 3968
+[parallel_consensus_v8]	Time for first validation pass 0.000030
+[parallel_consensus_v8]		Number of valid moves 3866
+[parallel_consensus_v8]	Time for second validation pass 0.000031
+[parallel_consensus_v8]		Number of valid moves 3866
+[parallel_consensus_v8]	Time for vertex movement 0.000218
+[parallel_consensus_v8]	Number of clusters 438
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003630
+[parallel_consensus_v8]		Number of edges to probe 48634
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.002936
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.028984
+[parallel_consensus_v8]		Number of valid moves 855
+[parallel_consensus_v8]	Time for first validation pass 0.000014
+[parallel_consensus_v8]		Number of valid moves 838
+[parallel_consensus_v8]	Time for second validation pass 0.000030
+[parallel_consensus_v8]		Number of valid moves 838
+[parallel_consensus_v8]	Time for vertex movement 0.000130
+[parallel_consensus_v8]	Number of clusters 224
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003116
+[parallel_consensus_v8]		Number of edges to probe 44960
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003993
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.035470
+[parallel_consensus_v8]		Number of valid moves 90
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 84
+[parallel_consensus_v8]	Time for second validation pass 0.000025
+[parallel_consensus_v8]		Number of valid moves 84
+[parallel_consensus_v8]	Time for vertex movement 0.000114
+[parallel_consensus_v8]	Number of clusters 213
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003048
+[parallel_consensus_v8]		Number of edges to probe 44768
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003835
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.035953
+[parallel_consensus_v8]		Number of valid moves 8
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 8
+[parallel_consensus_v8]	Time for second validation pass 0.000020
+[parallel_consensus_v8]		Number of valid moves 8
+[parallel_consensus_v8]	Time for vertex movement 0.000111
+[parallel_consensus_v8]	Number of clusters 211
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003052
+[parallel_consensus_v8]		Number of edges to probe 44731
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003839
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.036036
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000020
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000108
+[parallel_consensus_v8]	Number of clusters 211
+[parallel_consensus_v8] >>> Iteration: 7
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003043
+[parallel_consensus_v8]		Number of edges to probe 44731
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003920
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.035961
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.251219
+[parallel_consensus_v8]		tInit 0.000187
+[parallel_consensus_v8]		tSearch 0.227316
+[parallel_consensus_v8]		tValidate 0.000273
+[parallel_consensus_v8]		tMove 0.001058
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.
+Number of input clusterings: 37
+Output clustering file: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu04_gamma30_beta11.v8-parallel
+Algorithm to use: v8-parallel
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 51757
+Time to read input graph: 0.016803
+Directed
+Time to make undirected: 0.001966
+Time to read input clusterings: 0.054601
+Time to prepare cluster assignment matrix: 0.000343
+[parallel_consensus_v8] Time to prepare the consensus graph: 0.017147
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 102571
+[parallel_consensus_v8] >>> Iteration: 1
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.004804
+[parallel_consensus_v8]		Number of edges to probe 101628
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000025
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.003138
+[parallel_consensus_v8]		Number of valid moves 4848
+[parallel_consensus_v8]	Time for first validation pass 0.000029
+[parallel_consensus_v8]		Number of valid moves 4233
+[parallel_consensus_v8]	Time for second validation pass 0.000022
+[parallel_consensus_v8]		Number of valid moves 4233
+[parallel_consensus_v8]	Time for vertex movement 0.000410
+[parallel_consensus_v8]	Number of clusters 2168
+[parallel_consensus_v8] >>> Iteration: 2
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.005028
+[parallel_consensus_v8]		Number of edges to probe 82626
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.000433
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.013263
+[parallel_consensus_v8]		Number of valid moves 3702
+[parallel_consensus_v8]	Time for first validation pass 0.000033
+[parallel_consensus_v8]		Number of valid moves 3623
+[parallel_consensus_v8]	Time for second validation pass 0.000032
+[parallel_consensus_v8]		Number of valid moves 3623
+[parallel_consensus_v8]	Time for vertex movement 0.000270
+[parallel_consensus_v8]	Number of clusters 605
+[parallel_consensus_v8] >>> Iteration: 3
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003933
+[parallel_consensus_v8]		Number of edges to probe 61333
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.002945
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.037311
+[parallel_consensus_v8]		Number of valid moves 608
+[parallel_consensus_v8]	Time for first validation pass 0.000011
+[parallel_consensus_v8]		Number of valid moves 603
+[parallel_consensus_v8]	Time for second validation pass 0.000031
+[parallel_consensus_v8]		Number of valid moves 603
+[parallel_consensus_v8]	Time for vertex movement 0.000161
+[parallel_consensus_v8]	Number of clusters 384
+[parallel_consensus_v8] >>> Iteration: 4
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003659
+[parallel_consensus_v8]		Number of edges to probe 58529
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003528
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.043498
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for first validation pass 0.000006
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for second validation pass 0.000023
+[parallel_consensus_v8]		Number of valid moves 19
+[parallel_consensus_v8]	Time for vertex movement 0.000136
+[parallel_consensus_v8]	Number of clusters 376
+[parallel_consensus_v8] >>> Iteration: 5
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003646
+[parallel_consensus_v8]		Number of edges to probe 58450
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003549
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.043727
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000020
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for vertex movement 0.000135
+[parallel_consensus_v8]	Number of clusters 376
+[parallel_consensus_v8] >>> Iteration: 6
+[parallel_consensus_v8]	Time to figure out edges to be probed 0.003639
+[parallel_consensus_v8]		Number of edges to probe 58450
+[parallel_consensus_v8]	Time to compute Mua for all vertices 0.003553
+[parallel_consensus_v8]	Time to figure out potential moves for all vertices 0.043619
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for first validation pass 0.000008
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time for second validation pass 0.000021
+[parallel_consensus_v8]		Number of valid moves 0
+[parallel_consensus_v8]	Time to reach consensus 0.247453
+[parallel_consensus_v8]		tInit 0.000181
+[parallel_consensus_v8]		tSearch 0.223298
+[parallel_consensus_v8]		tValidate 0.000243
+[parallel_consensus_v8]		tMove 0.001112
