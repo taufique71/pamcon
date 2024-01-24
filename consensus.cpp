@@ -608,11 +608,11 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
 
         // Get the distribution of number of edges to probe per vertex
         // Would be used to prepare the vector of edges to probe
-        std::vector<int> dstrb_nnz_to_probe(n);
+        std::vector<int64_t> dstrb_nnz_to_probe(n);
+        std::vector<int64_t> ps_dstrb_nnz_to_probe(n+1, 0); // Prefix sum vector
         for(auto u = 0; u < n; u++){
             dstrb_nnz_to_probe[u] = nz_to_probe[u].size();
         }
-        vector<int> ps_dstrb_nnz_to_probe(n+1, 0); // Prefix sum vector
         std::partial_sum(dstrb_nnz_to_probe.begin(), dstrb_nnz_to_probe.end(), ps_dstrb_nnz_to_probe.begin()+1);
         nnz_to_probe = ps_dstrb_nnz_to_probe[n]; // Total number of nz to probe
         printf("[parallel_consensus_v8]\t\tNumber of edges to probe %d\n", nnz_to_probe );
@@ -620,14 +620,14 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         // Get the size of the clusters in which each element belongs. 
         // That is proportional to the amount of work to calculate Mua for each element
         // Would be used to load balance parallel Mua computation
-        vector<int> dstrb_work(n); 
+        vector<int64_t> dstrb_work(n); 
+        vector<int64_t> ps_dstrb_work(n+1, 0); // Prefix sum vector
         for(auto u = 0; u < n; u++){
-            dstrb_work[u] = clust_lst[clust_asn[u]].size();
+            dstrb_work[u] = (int64_t)clust_lst[clust_asn[u]].size();
         }
-        vector<int> ps_dstrb_work(n+1, 0); // Prefix sum vector
         std::partial_sum(dstrb_work.begin(), dstrb_work.end(), ps_dstrb_work.begin()+1);
         int nsplit = std::min(nthread * 4, (int)n); // For better dynamic load balancing 4x more splits than the number of threads
-        int work_per_split_expected = ps_dstrb_work[n] / nsplit;
+        int64_t work_per_split_expected = ps_dstrb_work[n] / nsplit;
         vector<int> splitters(nsplit);
 
         t0 = omp_get_wtime();
@@ -678,8 +678,10 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         }
         ps_dstrb_work.resize(nnz_to_probe+1);
         std::partial_sum(dstrb_work.begin(), dstrb_work.end(), ps_dstrb_work.begin()+1);
+        //cout << "Total work:" << ps_dstrb_work[nnz_to_probe] << endl;
         nsplit = std::min(nthread * 4, (int)nnz_to_probe); // For better dynamic load balancing 4x more splits than the number of threads
         work_per_split_expected = ps_dstrb_work[nnz_to_probe] / nsplit;
+        //printf("Expected work per split: %d\n", work_per_split_expected);
         splitters.resize(nsplit);
         t0 = omp_get_wtime();
 #pragma omp parallel
@@ -689,6 +691,33 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
             for(uint32_t s = 0; s < nsplit; s++){
                 splitters[s] = std::lower_bound(ps_dstrb_work.begin(), ps_dstrb_work.end(), s * work_per_split_expected) - ps_dstrb_work.begin();
             }
+            //if (tid == 0){
+                //vector<double> v(nsplit);
+                //for(uint32_t s = 0; s < nsplit; s++){
+                    //if (s < nsplit-1) {
+                        //v[s] = double(ps_dstrb_work[splitters[s+1]] - ps_dstrb_work[splitters[s]]);
+                        ////printf("Split %d: %d moves\n", s, splitters[s+1] - splitters[s]);
+                    //}
+                    //else{
+                        //v[s] = double(ps_dstrb_work[nnz_to_probe] - ps_dstrb_work[splitters[s]]);
+                        ////printf("Split %d: %d moves\n", s, nnz_to_probe - splitters[s]);
+                    //}
+                    //printf("%d:%d ", s, int(splitters[s]));
+                //}
+                //printf("\n");
+
+				////double sum = std::accumulate(v.begin(), v.end(), 0.0);
+				////double mean = sum / v.size();
+
+				////std::vector<double> diff(v.size());
+				////std::transform(v.begin(), v.end(), diff.begin(),
+							   ////std::bind2nd(std::minus<double>(), mean));
+				////double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+				////double stdev = std::sqrt(sq_sum / v.size());
+				
+				////printf("mean: %lf, stdev: %lf\n", mean, stdev);
+
+            //}
 #pragma omp for schedule(dynamic)
             for(uint32_t s = 0; s < nsplit; s++){
                 uint32_t start_idx = splitters[s];
@@ -699,7 +728,7 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
                     auto v = get<2>(nz_to_probe_unrolled[i]);
                     auto b = get<3>(nz_to_probe_unrolled[i]);
                     auto w = get<4>(nz_to_probe_unrolled[i]);
-                    
+                    //printf("Thread %d; Probing movement of %d from cluster %d to cluster %d\n", tid, u, a, b);
                     int Mub = 0;
                     for(auto j = 0; j < clust_lst[b].size(); j++){
                         auto e = clust_lst[b][j];
