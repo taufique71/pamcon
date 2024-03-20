@@ -6,6 +6,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cstring>
+#include <igraph.h>
 
 #include "CONPAS/MersenneTwister.h"
 #include "CONPAS/RefinedClustering.h"
@@ -473,7 +474,7 @@ vector<uint32_t> consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph, vector< 
  * Parallel implementation of consensus clustering
  * Input: graph and cluster assignment matrix
  * */
-vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph, vector< vector<uint32_t> > &C, int niter=10){
+vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph, vector< vector<uint32_t> > &C, int niter=10, bool verbose=false){
     double t0, t1, t2, t3, t4, t5, t6, t7, t8, t9;
     double tInit = 0;
     double tSearch = 0;
@@ -483,6 +484,17 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
     uint32_t n = graph.get_nrows(); // Number of vertices in the graph
     uint32_t nnz = graph.get_nnz(); // Number of edges in the graph
     uint32_t k = C[0].size(); // Number of input clustering
+    
+    if(k < 2){
+        // Make a copy of the cluster assignment
+        vector<uint32_t> clust_asn(n);
+        for (int i = 0; i < C.size(); i++){
+            clust_asn[i] = C[i][0];
+        }
+        relabel_clust_asn(clust_asn); // In case input contains non-continuous labels
+        return clust_asn; // Return
+    }
+
     int nthread;
     #pragma omp parallel
     {
@@ -529,9 +541,9 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
     }
 
     t1 = omp_get_wtime();
-    printf("[parallel_consensus_v8] Time to prepare the consensus graph: %lf\n", t1-t0);
+    if(verbose) printf("[parallel_consensus_v8] Time to prepare the consensus graph: %lf\n", t1-t0);
 
-    csc.PrintInfo();
+    if(verbose) csc.PrintInfo();
     const pvector<uint32_t>* colPtr = csc.get_colPtr();
     const pvector<uint32_t>* rowIds = csc.get_rowIds();
     const pvector<uint32_t>* nzVals = csc.get_nzVals();
@@ -555,7 +567,7 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
     vector<int> last_deltaS(n, 0);
 
     for(int it = 1; it <= niter; it++){
-        printf("[parallel_consensus_v8] >>> Iteration: %d\n", it);
+        if(verbose) printf("[parallel_consensus_v8] >>> Iteration: %d\n", it);
 
         potential_moves pm(n);
         
@@ -604,7 +616,7 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
 
         t1 = omp_get_wtime();
         tSearch += (t1-t0);
-        printf("[parallel_consensus_v8]\tTime to figure out edges to be probed %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8]\tTime to figure out edges to be probed %lf\n", t1-t0);
 
         // Get the distribution of number of edges to probe per vertex
         // Would be used to prepare the vector of edges to probe
@@ -615,7 +627,10 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         }
         std::partial_sum(dstrb_nnz_to_probe.begin(), dstrb_nnz_to_probe.end(), ps_dstrb_nnz_to_probe.begin()+1);
         nnz_to_probe = ps_dstrb_nnz_to_probe[n]; // Total number of nz to probe
-        printf("[parallel_consensus_v8]\t\tNumber of edges to probe %d\n", nnz_to_probe );
+        if(verbose) printf("[parallel_consensus_v8]\t\tNumber of edges to probe %d\n", nnz_to_probe );
+        if (nnz_to_probe == 0){
+            break;
+        }
 
         // Get the size of the clusters in which each element belongs. 
         // That is proportional to the amount of work to calculate Mua for each element
@@ -662,7 +677,7 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         
         t1 = omp_get_wtime();
         tSearch += (t1-t0);
-        printf("[parallel_consensus_v8]\tTime to compute Mua for all vertices %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8]\tTime to compute Mua for all vertices %lf\n", t1-t0);
 
         dstrb_work.resize(nnz_to_probe); 
 
@@ -691,33 +706,6 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
             for(uint32_t s = 0; s < nsplit; s++){
                 splitters[s] = std::lower_bound(ps_dstrb_work.begin(), ps_dstrb_work.end(), s * work_per_split_expected) - ps_dstrb_work.begin();
             }
-            //if (tid == 0){
-                //vector<double> v(nsplit);
-                //for(uint32_t s = 0; s < nsplit; s++){
-                    //if (s < nsplit-1) {
-                        //v[s] = double(ps_dstrb_work[splitters[s+1]] - ps_dstrb_work[splitters[s]]);
-                        ////printf("Split %d: %d moves\n", s, splitters[s+1] - splitters[s]);
-                    //}
-                    //else{
-                        //v[s] = double(ps_dstrb_work[nnz_to_probe] - ps_dstrb_work[splitters[s]]);
-                        ////printf("Split %d: %d moves\n", s, nnz_to_probe - splitters[s]);
-                    //}
-                    //printf("%d:%d ", s, int(splitters[s]));
-                //}
-                //printf("\n");
-
-				////double sum = std::accumulate(v.begin(), v.end(), 0.0);
-				////double mean = sum / v.size();
-
-				////std::vector<double> diff(v.size());
-				////std::transform(v.begin(), v.end(), diff.begin(),
-							   ////std::bind2nd(std::minus<double>(), mean));
-				////double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-				////double stdev = std::sqrt(sq_sum / v.size());
-				
-				////printf("mean: %lf, stdev: %lf\n", mean, stdev);
-
-            //}
 #pragma omp for schedule(dynamic)
             for(uint32_t s = 0; s < nsplit; s++){
                 uint32_t start_idx = splitters[s];
@@ -754,8 +742,8 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         }
         t1 = omp_get_wtime();
         tSearch += (t1-t0);
-        printf("[parallel_consensus_v8]\tTime to figure out potential moves for all vertices %lf\n", t1-t0);
-        printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+        if(verbose) printf("[parallel_consensus_v8]\tTime to figure out potential moves for all vertices %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
 
         // First validation pass:
         // Is a move such that u moves to some cluster attracted by v while v moves to the cluster of u attracted by it?
@@ -779,8 +767,8 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         }
         t1 = omp_get_wtime();
         tValidate += (t1-t0);
-        printf("[parallel_consensus_v8]\tTime for first validation pass %lf\n", t1-t0);
-        printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+        if(verbose) printf("[parallel_consensus_v8]\tTime for first validation pass %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
 
         // Second validation pass:
         // If same set of vertices are moving then total potential reduction in distance should be lower than the previous iteration
@@ -808,8 +796,8 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
         }
         t1 = omp_get_wtime();
         tValidate += (t1-t0);
-        printf("[parallel_consensus_v8]\tTime for second validation pass %lf\n", t1-t0);
-        printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+        if(verbose) printf("[parallel_consensus_v8]\tTime for second validation pass %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
 
         // Perform moves
         if(flag == true){
@@ -824,20 +812,20 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
             clust_lst = clust_asn_to_lst(clust_asn);
             t1 = omp_get_wtime();
             tMove += t1-t0;
-            printf("[parallel_consensus_v8]\tTime for vertex movement %lf\n", t1-t0);
+            if(verbose) printf("[parallel_consensus_v8]\tTime for vertex movement %lf\n", t1-t0);
         }
         else{
             break;
         }
-        printf("[parallel_consensus_v8]\tNumber of clusters %d\n", clust_lst.size() );
+        if(verbose) printf("[parallel_consensus_v8]\tNumber of clusters %d\n", clust_lst.size() );
     }
 
     t3 = omp_get_wtime();
-    printf("[parallel_consensus_v8]\tTime to reach consensus %lf\n", t3-t2 );
-    printf("[parallel_consensus_v8]\t\ttInit %lf\n", tInit );
-    printf("[parallel_consensus_v8]\t\ttSearch %lf\n", tSearch );
-    printf("[parallel_consensus_v8]\t\ttValidate %lf\n", tValidate );
-    printf("[parallel_consensus_v8]\t\ttMove %lf\n", tMove );
+    if(verbose) printf("[parallel_consensus_v8]\tTime to reach consensus %lf\n", t3-t2 );
+    if(verbose) printf("[parallel_consensus_v8]\t\ttInit %lf\n", tInit );
+    if(verbose) printf("[parallel_consensus_v8]\t\ttSearch %lf\n", tSearch );
+    if(verbose) printf("[parallel_consensus_v8]\t\ttValidate %lf\n", tValidate );
+    if(verbose) printf("[parallel_consensus_v8]\t\ttMove %lf\n", tMove );
 
     return clust_asn;
 }
@@ -849,8 +837,9 @@ int main(int argc, char* argv[]){
     string graphfile;
     string input_clustering_prefix; // Directory containing input clusterings
     int k; // Number of input clusterings
-    string outputfile;
+    string output_prefix;
     string alg;
+    double pre_proc_threshold = 1.0; // Default
     if(argc < 10){
         printf("Not enough arguments!!\n");
         return -1;
@@ -860,31 +849,38 @@ int main(int argc, char* argv[]){
         if (strcmp(argv[i], "--graph-file") == 0){
             graphfile = string(argv[i+1]);
         }
-        else if (strcmp(argv[i], "--input-clustering-prefix") == 0){
+        else if (strcmp(argv[i], "--input-prefix") == 0){
             input_clustering_prefix = string(argv[i+1]);
         }
-        else if (strcmp(argv[i], "--number-of-input-clustering") == 0){
+        else if (strcmp(argv[i], "--k") == 0){
             k = atoi(argv[i+1]);
         }
-        else if (strcmp(argv[i], "--output-file") == 0){
-            outputfile = string(argv[i+1]);
+        else if (strcmp(argv[i], "--output-prefix") == 0){
+            output_prefix = string(argv[i+1]);
         }
         else if (strcmp(argv[i], "--alg") == 0){
             alg = string(argv[i+1]);
+        }
+        else if (strcmp(argv[i], "--pre-proc-threshold") == 0){
+            pre_proc_threshold = atof(argv[i+1]);
         }
     }
 
     cout << "Graph: " << graphfile << endl;
     cout << "Input clustering prefix: " << input_clustering_prefix << endl;
     cout << "Number of input clusterings: " << k << endl;
-    cout << "Output clustering file: " << outputfile << endl;
+    cout << "Output file prefix: " << output_prefix<< endl;
     cout << "Algorithm to use: " << alg << endl;
+    cout << "Pre process threshold: " << pre_proc_threshold << endl;
+    if ( (alg == "boem") || (alg == "saoem") ){
+        cout << "!!! Pre process threshold has no effect for " << alg << endl;
+    }
     
     if ( (alg == "boem") || (alg == "saoem") ){
         // Run methods from CONPAS
         vector<string> fileNames;
         for (int i = 0; i < k; i++){
-            string cluster_assignment_fname = input_clustering_prefix + to_string(i);
+            string cluster_assignment_fname = input_clustering_prefix + std::string(".") + to_string(i);
             fileNames.push_back(cluster_assignment_fname);
         }
         SetPartitionVector spv;
@@ -897,7 +893,7 @@ int main(int argc, char* argv[]){
             auto saoem_sp = saoem.Run(spv);
             t1 = omp_get_wtime();
             printf("SAOEM: %lf seconds\n", t1-t0);
-
+            string outputfile = output_prefix + std::string(".") + alg;
             saoem_sp.WriteClusterListFile(outputfile);
         }
         else if(alg == "boem"){
@@ -910,6 +906,7 @@ int main(int argc, char* argv[]){
             
             //cout << boem_sp << endl;
             //boem_sp.PrintDistributionOfBlockSizes();
+            string outputfile = output_prefix + std::string(".") + alg;
             boem_sp.WriteClusterListFile(outputfile);
         }
     }
@@ -960,33 +957,150 @@ int main(int argc, char* argv[]){
         vector< vector<uint32_t> > input_clusterings(k);
         for (int i = 0 ; i < k; i++){
             input_clusterings[i].resize(n);
-            string cluster_assignment_fname = input_clustering_prefix + to_string(i);
+            string cluster_assignment_fname = input_clustering_prefix + std::string(".") + to_string(i);
             read_clust_lst(cluster_assignment_fname, input_clusterings[i]);
             //clust_asn_to_lst(input_clusterings[i]);
         }
         t1 = omp_get_wtime();
         printf("Time to read input clusterings: %lf\n", t1-t0);
 
-        /*
-         * Convert the input clusterings into a cluster assignment matrix
-         * Vector of n elements
-         *      - Each element is a vector of k elements
-         * */
-        t0 = omp_get_wtime();
-        vector< vector<uint32_t> > C(n);
-        for (int i = 0 ; i < n; i++){
-            C[i].resize(k);
-            for(int j = 0; j < k; j++){
-                C[i][j] = input_clusterings[j][i];
+
+       /*
+        * Preprocessing
+        * Find clustering of clustering
+        * */
+        igraph_matrix_t distance_kk;
+        igraph_matrix_init(&distance_kk, k, k);
+        igraph_matrix_fill(&distance_kk, 0);
+        for(int i = 0; i < k; i++){
+            for (int j = i; j < k; j++){
+                igraph_vector_int_t partition_i_ig;
+                igraph_vector_int_init(&partition_i_ig, input_clusterings[i].size());
+
+                for(int ii = 0; ii < input_clusterings[i].size(); ii++){
+                    VECTOR(partition_i_ig)[ii] = input_clusterings[i][ii];
+                }
+
+                igraph_vector_int_t partition_j_ig;
+                igraph_vector_int_init(&partition_j_ig, input_clusterings[j].size());
+
+                for(int ii = 0; ii < input_clusterings[j].size(); ii++){
+                    VECTOR(partition_j_ig)[ii] = input_clusterings[j][ii];
+                }
+
+                igraph_real_t dist;
+                igraph_compare_communities(&partition_i_ig, &partition_j_ig, &dist, IGRAPH_COMMCMP_SPLIT_JOIN);
+                dist = (dist / 2) / double(n);
+                igraph_matrix_set(&distance_kk, i, j, (dist));
+                igraph_matrix_set(&distance_kk, j, i, (dist));
+                int ki = *(std::max_element(input_clusterings[i].begin(), input_clusterings[i].end())) + 1;
+                int kj = *(std::max_element(input_clusterings[j].begin(), input_clusterings[j].end())) + 1;
+                //printf("%d cliusters in %d; %d clusters in %d; dist(%d, %d): %0.2lf\n", ki, i, kj, j, i, j, (dist));
             }
         }
-        t1 = omp_get_wtime();
-        printf("Time to prepare cluster assignment matrix: %lf\n", t1-t0);
+
+        //for(int i = 0; i < k; i++){
+            //for (int j = 0; j < k; j++){
+                //printf("%0.2lf ", MATRIX(distance_kk,i,j) );
+            //}
+            //printf("\n");
+        //}
         
-        vector<uint32_t> cons_clust_asn;
-        if(alg == "v8") cons_clust_asn = consensus_v8(graph, C, 100); // Maximum 100 iterations
-        else if(alg == "v8-parallel") cons_clust_asn = parallel_consensus_v8(graph, C, 100); // Maximum 100 iterations
-        write_clust_lst(outputfile, cons_clust_asn);
+        int count1 = 0;
+        int count2 = 0;
+        for(int i = 0; i < k; i++){
+            for (int j = 0; j < k; j++){
+                if(MATRIX(distance_kk, i, j) > pre_proc_threshold){
+                    igraph_matrix_set(&distance_kk, i, j, 0);
+                    count1++;
+                }
+                else{
+                    igraph_matrix_set(&distance_kk, i, j, 1);
+                    count2++;
+                }
+                //printf("%0.2lf ", MATRIX(distance_kk,i,j) );
+                //printf("drop count: %d, keep count: %d\n", count1, count2 );
+            }
+            //printf("\n");
+        }
+
+        //for(int i = 0; i < k; i++){
+            //for (int j = 0; j < k; j++){
+                //if(MATRIX(distance_kk, i, j) == 0){
+                    //printf("     ");
+                //}
+                //else printf("%0.2lf ", MATRIX(distance_kk,i,j) );
+            //}
+            //printf("\n");
+        //}
+        igraph_t contingency_ig;
+        igraph_adjacency(&contingency_ig, &distance_kk, IGRAPH_ADJ_DIRECTED, IGRAPH_NO_LOOPS);
+
+        igraph_integer_t n_components;
+        igraph_vector_int_t membership;
+        igraph_vector_int_init(&membership, k);
+        igraph_vector_int_t component_sizes;
+        igraph_vector_int_init(&component_sizes, k);
+        igraph_connected_components(&contingency_ig, &membership, &component_sizes, &n_components, IGRAPH_WEAK);
+        //printf("%d components\n", n_components);
+        //for(int  i = 0; i < k; i++){
+            //printf("Partition %d: Contains %d clusters. Belongs to component %d: size %ld\n", i, *(std::max_element(input_clusterings[i].begin(), input_clusterings[i].end())) + 1, VECTOR(membership)[i], VECTOR(component_sizes)[VECTOR(membership)[i]] );
+        //}
+        std::vector< std::pair<int, int> > component_ranking(n_components);
+        for(int c = 0; c < n_components; c++){
+            component_ranking[c] = std::make_pair(c, (int)VECTOR(component_sizes)[c]);
+        }
+
+        std::sort(component_ranking.begin(), component_ranking.end(), 
+                  [](std::pair<int, int> lhs, std::pair<int, int> rhs){
+                    if(lhs.second < rhs.second){ return false; }
+                    else return true;
+                  });
+        
+        /*
+         * Find consensus for each group/component
+         * */
+        for(int c = 0; c < n_components; c++){
+            int cid = component_ranking[c].first;
+            int csize = component_ranking[c].second;
+            //printf("cid: %d, csize: %d\n", cid, csize);
+            /*
+             * Convert the input clusterings into a cluster assignment matrix
+             * Vector of n elements
+             *      - Each element is a vector of k elements
+             * */
+            t0 = omp_get_wtime();
+            vector< vector<uint32_t> > C(n);
+            for (int i = 0 ; i < n; i++){
+                C[i].resize(csize);
+                int cj = 0;
+                for(int j = 0; j < k; j++){
+                    if (VECTOR(membership)[j] == cid){
+                        C[i][cj] = input_clusterings[j][i];
+                        cj++;
+                        //printf("%d ", j);
+                    }
+                }
+            }
+            t1 = omp_get_wtime();
+            printf("Time to prepare cluster assignment matrix: %lf\n", t1-t0);
+
+            vector<uint32_t> cons_clust_asn;
+            if(alg == "v8") cons_clust_asn = consensus_v8(graph, C, 100); // Maximum 100 iterations
+            else if(alg == "v8-parallel") cons_clust_asn = parallel_consensus_v8(graph, C, 100, false); // Maximum 100 iterations, verbose false
+            int kcons = *(std::max_element(cons_clust_asn.begin(), cons_clust_asn.end())) + 1;
+            printf("%d clusters in solution %d, brings consensus of %d partitions\n", kcons, c, csize);
+            printf("soln-%d: consensus of [", c);
+            for(int j = 0; j < k; j++){
+                if (VECTOR(membership)[j] == cid){
+                    printf("%d, ", j);
+                }
+            }
+            printf("]\n");
+
+            string outputfile = output_prefix + std::string(".soln-") + std::to_string(c);
+            write_clust_lst(outputfile, cons_clust_asn);
+        }
     }
 
 	return 0;
