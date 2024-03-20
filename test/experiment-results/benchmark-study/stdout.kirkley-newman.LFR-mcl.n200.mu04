@@ -1,0 +1,8 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-mcl/n200/LFR_n200_mu04_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-mcl/n200/LFR_n200_mu04_gamma30_beta11
+Number of input clusterings: 18
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/kirkley-newman.LFR-mcl.n200.mu04/LFR_n200_mu04_gamma30_beta11
+3 clusters in solution 0 brings consensus of 14 partitions
+soln-0 [ 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
+1 clusters in solution 1 brings consensus of 4 partitions
+soln-1 [ 5, 15, 16, 17 ]

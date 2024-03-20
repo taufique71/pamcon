@@ -1,0 +1,50 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu05_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR/n5000/LFR_n5000_mu05_gamma30_beta11
+Number of input clusterings: 37
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/v8-parallel.LFR.n5000.mu05/LFR_n5000_mu05_gamma30_beta11
+Algorithm to use: v8-parallel
+Pre process threshold: 0.45
+CSC matrix:  Rows= 5000 Columns= 5000 nnz= 27089
+Time to read input graph: 0.086567
+Directed
+Time to make undirected: 0.001128
+Time to read input clusterings: 0.067018
+Time to prepare cluster assignment matrix: 0.000306
+2045 clusters in solution 0, brings consensus of 25 partitions
+soln-0: consensus of [0, 1, 2, 3, 4, 6, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 33, 34, 35, 36, ]
+Time to prepare cluster assignment matrix: 0.000290
+43 clusters in solution 1, brings consensus of 1 partitions
+soln-1: consensus of [32, ]
+Time to prepare cluster assignment matrix: 0.000375
+48 clusters in solution 2, brings consensus of 1 partitions
+soln-2: consensus of [31, ]
+Time to prepare cluster assignment matrix: 0.000436
+70 clusters in solution 3, brings consensus of 1 partitions
+soln-3: consensus of [30, ]
+Time to prepare cluster assignment matrix: 0.000353
+60 clusters in solution 4, brings consensus of 1 partitions
+soln-4: consensus of [29, ]
+Time to prepare cluster assignment matrix: 0.000326
+65 clusters in solution 5, brings consensus of 1 partitions
+soln-5: consensus of [13, ]
+Time to prepare cluster assignment matrix: 0.000363
+62 clusters in solution 6, brings consensus of 1 partitions
+soln-6: consensus of [12, ]
+Time to prepare cluster assignment matrix: 0.000402
+50 clusters in solution 7, brings consensus of 1 partitions
+soln-7: consensus of [11, ]
+Time to prepare cluster assignment matrix: 0.000322
+51 clusters in solution 8, brings consensus of 1 partitions
+soln-8: consensus of [10, ]
+Time to prepare cluster assignment matrix: 0.000322
+32 clusters in solution 9, brings consensus of 1 partitions
+soln-9: consensus of [9, ]
+Time to prepare cluster assignment matrix: 0.000366
+32 clusters in solution 10, brings consensus of 1 partitions
+soln-10: consensus of [8, ]
+Time to prepare cluster assignment matrix: 0.000294
+95 clusters in solution 11, brings consensus of 1 partitions
+soln-11: consensus of [7, ]
+Time to prepare cluster assignment matrix: 0.000288
+70 clusters in solution 12, brings consensus of 1 partitions
+soln-12: consensus of [5, ]

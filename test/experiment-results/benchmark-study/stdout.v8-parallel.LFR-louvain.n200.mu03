@@ -1,0 +1,13 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n200/LFR_n200_mu03_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n200/LFR_n200_mu03_gamma30_beta11
+Number of input clusterings: 16
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/v8-parallel.LFR-louvain.n200.mu03/LFR_n200_mu03_gamma30_beta11
+Algorithm to use: v8-parallel
+Pre process threshold: 0.35
+CSC matrix:  Rows= 200 Columns= 200 nnz= 1031
+Time to read input graph: 0.008555
+Directed
+Time to make undirected: 0.000175
+Time to read input clusterings: 0.012017
+15 clusters in solution 0, brings consensus of 16 partitions
+soln-0: consensus of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ]

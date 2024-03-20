@@ -1,0 +1,15 @@
+Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-mcl/n1000/LFR_n1000_mu02_gamma30_beta11.mtx
+Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-mcl/n1000/LFR_n1000_mu02_gamma30_beta11
+Number of input clusterings: 18
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/v8-parallel.LFR-mcl.n1000.mu02/LFR_n1000_mu02_gamma30_beta11
+Algorithm to use: v8-parallel
+Pre process threshold: 0.35
+CSC matrix:  Rows= 1000 Columns= 1000 nnz= 5165
+Time to read input graph: 0.078459
+Directed
+Time to make undirected: 0.000335
+Time to read input clusterings: 0.017565
+123 clusters in solution 0, brings consensus of 17 partitions
+soln-0: consensus of [0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, ]
+7 clusters in solution 1, brings consensus of 1 partitions
+soln-1: consensus of [2, ]
