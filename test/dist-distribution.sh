@@ -2,41 +2,39 @@
 
 PROJECT_DIR=$HOME/Codes/graph-consensus-clustering
 DATA_DIR=$PROJECT_DIR/test/data
+RESULT_DIR=$PROJECT_DIR/test/experiment-results
 
 export OMP_NUM_THREADS=48
 export OMP_PLACES=cores
 
 BIN=$PROJECT_DIR/dist-distribution
-for DIST in vi split-join rand
-#for DIST in rand
+
+#for DATASET_NAME in LFR-louvain LFR-mcl LFR
+#for DATASET_NAME in LFR-preprocessed
+for DATASET_NAME in LFR
 do
     #for ALG in v8-parallel v8 boem saoem
-    for ALG in saoem
+    for ALG in v8-parallel kirkley-newman
+    #for ALG in kirkley-newman 
     do
-        ##STDOUT_FILE=$PROJECT_DIR/stdout.LFR.$ALG
-
-        #if [ -f $STDOUT_FILE ]; then
-            #rm -rf $STDOUT_FILE
-        #fi
-        
-        #echo $STDOUT_FILE
 
         #for N in 200 1000 5000
-        for N in 5000
+        for N in 1000 5000
         do
-            #for MU in 01 02 03 04
-            for MU in 01
+            for MU in 01 02 03 04 05 06 07
+            #for MU in 01
             do
-                GRAPH_FILE=$DATA_DIR/LFR/n$N/LFR_n"$N"_mu"$MU"_gamma30_beta11.mtx
-                INPUT_CLUSTERING_PREFIX=$DATA_DIR/LFR/n$N/LFR_n"$N"_mu"$MU"_gamma30_beta11.
-                CONS_CLUSTERING_FILE=$INPUT_CLUSTERING_PREFIX"$ALG"
-                DISTANCE_DISTRIBUTION_FILE=$INPUT_CLUSTERING_PREFIX"$ALG"."$DIST"
+                FILE_PREFIX=LFR_n"$N"_mu"$MU"_gamma30_beta11
+                OUTPUT_DIR_NAME="$ALG"."$DATASET_NAME".n"$N".mu"$MU"
+                OUTPUT_DIR="$RESULT_DIR"/"$OUTPUT_DIR_NAME"
+                INPUT_CLUSTERING_PREFIX=$DATA_DIR/$DATASET_NAME/n$N/$FILE_PREFIX
+                OUTPUT_CLUSTERING_PREFIX=$OUTPUT_DIR/$FILE_PREFIX
+                GT_FILE=$INPUT_CLUSTERING_PREFIX.gt
 
                 NUMBER_OF_INPUT_CLUSTERING=0
                 while [ $NUMBER_OF_INPUT_CLUSTERING -ne 100 ]
                 do
-                    CLUSTER_FILE=$INPUT_CLUSTERING_PREFIX"$NUMBER_OF_INPUT_CLUSTERING"
-
+                    CLUSTER_FILE="$INPUT_CLUSTERING_PREFIX"."$NUMBER_OF_INPUT_CLUSTERING"
                     if [ -f $CLUSTER_FILE ]; then
                         NUMBER_OF_INPUT_CLUSTERING=$(($NUMBER_OF_INPUT_CLUSTERING+1))
                     else
@@ -44,11 +42,29 @@ do
                     fi
                 done
 
-                $BIN --consensus-file $CONS_CLUSTERING_FILE \
-                    --input-clustering-prefix $INPUT_CLUSTERING_PREFIX \
-                    --number-of-input-clustering $NUMBER_OF_INPUT_CLUSTERING \
-                    --output-file $DISTANCE_DISTRIBUTION_FILE \
-                    --distance-metric $DIST
+                for DIST in vi split-join rand nmi
+                #for DIST in nmi
+                do
+                    SOLN=0
+                    while [ $SOLN -lt 100 ]
+                    do
+                        #echo Solution: $SOLN
+                        CONSENSUS_FILE="$OUTPUT_CLUSTERING_PREFIX".soln-"$SOLN"
+                        DISTANCE_DISTRIBUTION_FILE="$CONSENSUS_FILE".$DIST
+                        if [ -f $CONSENSUS_FILE ]; then
+                            $BIN --consensus-file $CONSENSUS_FILE \
+                                --input-clustering-prefix $INPUT_CLUSTERING_PREFIX \
+                                --number-of-input-clustering $NUMBER_OF_INPUT_CLUSTERING \
+                                --ground-truth-file $GT_FILE \
+                                --output-file $DISTANCE_DISTRIBUTION_FILE \
+                                --distance-metric $DIST
+                        else
+                            break;
+                        fi
+                        echo ---
+                        SOLN=$(($SOLN+1))
+                    done
+                done
             done
         done
     done

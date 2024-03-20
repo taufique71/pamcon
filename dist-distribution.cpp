@@ -51,6 +51,7 @@ int main(int argc, char* argv[]){
     double t0, t1;
 
     string consensus_file;
+    string ground_truth_file;
     string input_clustering_prefix; // Directory containing input clusterings
     int k; // Number of input clusterings
     string outputfile;
@@ -63,6 +64,9 @@ int main(int argc, char* argv[]){
     for(int i = 1; i < argc; i++){
         if (strcmp(argv[i], "--consensus-file") == 0){
             consensus_file = string(argv[i+1]);
+        }
+        else if (strcmp(argv[i], "--ground-truth-file") == 0){
+            ground_truth_file = string(argv[i+1]);
         }
         else if (strcmp(argv[i], "--input-clustering-prefix") == 0){
             input_clustering_prefix = string(argv[i+1]);
@@ -79,6 +83,7 @@ int main(int argc, char* argv[]){
     }
 
     cout << "Consensus file: " << consensus_file << endl;
+    cout << "Ground truth file: " << ground_truth_file << endl;
     cout << "Input clustering prefix: " << input_clustering_prefix << endl;
     cout << "Number of input clusterings: " << k << endl;
     cout << "Distance distribution file (output): " << outputfile << endl;
@@ -93,37 +98,73 @@ int main(int argc, char* argv[]){
         VECTOR(consensus_ig)[i] = consensus[i];
     }
 
+    vector<uint32_t> ground_truth;
+    igraph_vector_int_t ground_truth_ig;
+    if(ground_truth_file != ""){
+        read_clust_lst(ground_truth_file, ground_truth);
+        igraph_vector_int_init(&ground_truth_ig, ground_truth.size() );
+        for(int i = 0; i < ground_truth.size(); i++){
+            VECTOR(ground_truth_ig)[i] = ground_truth[i];
+        }
+    }
+
     ofstream outfile;
     outfile.open(outputfile, ofstream::trunc);
 
-    vector< vector<uint32_t> > input_clusterings(k);
-    for (int j = 0; j < k; j++){
-        string clust_lst_fname = input_clustering_prefix + to_string(j);
-        read_clust_lst(clust_lst_fname, input_clusterings[j]);
-
-        printf("Comparing: %s with %s\n", consensus_file.c_str(), clust_lst_fname.c_str());
-
-        igraph_vector_int_t ip_ig;
-        igraph_vector_int_init(&ip_ig, input_clusterings[j].size() );
-        for(int i = 0; i < input_clusterings[j].size(); i++){
-            VECTOR(ip_ig)[i] = input_clusterings[j][i];
-        }
-
+    if(distance_metric == "nmi"){
         igraph_real_t dist;
-        if(distance_metric == "vi") igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_VI);
-        else if(distance_metric == "split-join") igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_SPLIT_JOIN);
-        else if(distance_metric == "rand") {
-            igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_RAND);
-            dist = 1.0 - dist;
-        }
-        printf("%s distance: %g\n", distance_metric.c_str(), dist);
+        //cout << "---" << endl;
+        //cout << "Comparison between:" << endl;
+        //cout << ground_truth_file << endl;
+        //cout << "and" << endl;
+        //cout << consensus_file << endl;
+        igraph_compare_communities(&ground_truth_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_NMI);
         outfile << dist << "\n";
-        igraph_vector_int_destroy(&ip_ig);
-        printf("---\n");
+        //cout << "---" << endl;
     }
+    else{
+        vector< vector<uint32_t> > input_clusterings(k);
+        for (int j = 0; j < k; j++){
+            string clust_lst_fname = input_clustering_prefix + std::string(".") + to_string(j);
+            read_clust_lst(clust_lst_fname, input_clusterings[j]);
+
+            //printf("Comparing: %s with %s\n", consensus_file.c_str(), clust_lst_fname.c_str());
+
+            igraph_vector_int_t ip_ig;
+            igraph_vector_int_init(&ip_ig, input_clusterings[j].size() );
+            for(int i = 0; i < input_clusterings[j].size(); i++){
+                VECTOR(ip_ig)[i] = input_clusterings[j][i];
+            }
+
+            //cout << "---" << endl;
+            //cout << "Comparison between:" << endl;
+            //cout << clust_lst_fname << endl;
+            //cout << "and" << endl;
+            //cout << consensus_file << endl;
+
+            igraph_real_t dist;
+            if(distance_metric == "vi"){
+                igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_VI);
+            }
+            else if(distance_metric == "split-join"){
+                igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_SPLIT_JOIN);
+                dist = (dist / 2) / double(consensus.size());
+            }
+            else if(distance_metric == "rand") {
+                igraph_compare_communities(&ip_ig, &consensus_ig, &dist, IGRAPH_COMMCMP_RAND);
+                dist = 1.0 - dist;
+            }
+            //printf("%s distance: %g\n", distance_metric.c_str(), dist);
+            outfile << dist << "\n";
+            //cout << "---" << endl;
+            igraph_vector_int_destroy(&ip_ig);
+        }
+    }
+
 
     outfile.close();
     igraph_vector_int_destroy(&consensus_ig);
+    if(ground_truth_file != "") igraph_vector_int_destroy(&ground_truth_ig);
 
 	return 0;
 }

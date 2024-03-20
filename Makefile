@@ -2,6 +2,7 @@ LOCAL_HOME_DIR = /home/mth
 PROJECT_DIR = $(HOME)/Codes/graph-consensus-clustering
 NIST_DIR = $(PROJECT_DIR)/NIST
 CONPAS_DIR = $(PROJECT_DIR)/CONPAS
+KN_DIR=$(PROJECT_DIR)/Kirkley-Newman
 IGRAPH_DIR = $(LOCAL_HOME_DIR)/Software/igraph-0.10.6/install
 
 CFLAGS = -std=c++11 -O3 -fopenmp -fpermissive -ffast-math -fomit-frame-pointer -msse -mmmx  
@@ -48,10 +49,14 @@ mmio.o: $(NIST_DIR)/mmio.c
 	$(CC) $(CFLAGS) -c -o mmio.o $(NIST_DIR)/mmio.c
 
 consensus.o: consensus.cpp
-	$(CC) $(CFLAGS) -c -o consensus.o consensus.cpp
+	$(CC) $(CFLAGS) -c -o consensus.o consensus.cpp \
+		-I$(IGRAPH_DIR)/include/igraph 
 
 consensus: consensus.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
-	$(CC) $(CFLAGS) -o consensus *.o
+	$(CC) $(CFLAGS) -o consensus *.o \
+		-L$(IGRAPH_DIR)/lib \
+		-ligraph -lm -larpack 
+
 
 dist-distribution: dist-distribution.cpp
 	$(CC) $(CFLAGS) dist-distribution.cpp \
@@ -60,9 +65,20 @@ dist-distribution: dist-distribution.cpp
 		-ligraph -lm -larpack \
 		-o dist-distribution
 
+preprocess: preprocess.cpp
+	$(CC) $(CFLAGS) preprocess.cpp \
+		-I$(IGRAPH_DIR)/include/igraph \
+		-L$(IGRAPH_DIR)/lib \
+		-ligraph -lm -larpack \
+		-o preprocess
+
+kn: $(KN_DIR)/kn.pyx
+	cythonize -a -i Kirkley-Newman/kn.pyx
+
 all: consensus dist-distribution
 
 clean:
 	rm -f *.o
 	rm -f consensus
-	rm -f dist-distribution 
+	rm -f dist-distribution
+	rm -r $(KN_DIR)/kn
