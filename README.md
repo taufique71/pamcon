@@ -1,4 +1,4 @@
-# gonotontro
+# fmccg: Fast Median Consensus Clustering on Graphs
 
 - `consensus.h` contains our implementations
 - `main.cpp` contains a cpp application that uses different implementations - our implementation and implementation from Filkov and Skienna
