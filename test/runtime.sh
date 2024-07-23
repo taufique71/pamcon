@@ -1,15 +1,16 @@
 #!/bin/bash -l
 
-PROJECT_DIR=$HOME/Codes/graph-consensus-clustering
-DATA_DIR=$PROJECT_DIR/test/data
+PROJECT_DIR=$HOME/Codes/fmccg
+#DATA_DIR=$PROJECT_DIR/test/data
+DATA_DIR=$SCRATCH/fmccg-data
 RESULT_DIR=$PROJECT_DIR/test/experiment-results/runtime-study
 
-export OMP_NUM_THREADS=8
-export OMP_PLACES=cores
+#export OMP_NUM_THREADS=8
+#export OMP_PLACES=cores
 
 BIN=$PROJECT_DIR/consensus
-KIRKLEY_NEWMAN_SCRIPT=$PROJECT_DIR/Kirkley-Newman/main.py
-LANCICHINETTI_FORTUNATO_SCRIPT=$PROJECT_DIR/Lancichinetti-Fortunato/main.py
+#KIRKLEY_NEWMAN_SCRIPT=$PROJECT_DIR/Kirkley-Newman/main.py
+#LANCICHINETTI_FORTUNATO_SCRIPT=$PROJECT_DIR/Lancichinetti-Fortunato/main.py
 
 #for DATASET_NAME in LFR-louvain LFR-mcl LFR
 #for DATASET_NAME in LFR-preprocessed
@@ -19,8 +20,8 @@ do
     #for ALG in v8 boem saoem
     #for ALG in lancichinetti-fortunato
     #for ALG in kirkley-newman
-    for ALG in v8-parallel
-    #for ALG in boem
+    #for ALG in v8-parallel
+    for ALG in boem
     do
 
         for N in 200 1000 5000 25000 125000
@@ -77,13 +78,18 @@ do
                 elif [ "$ALG" == "v8-parallel" ]; then
                     # Default threshold for all runtime experiments
                     # Bring consensus of everything
-                    T=0.99
-                    $BIN --graph-file "$GRAPH_FILE" \
-                    --input-prefix "$INPUT_CLUSTERING_PREFIX" \
-                    --k "$NUMBER_OF_INPUT_CLUSTERING" \
-                    --output-prefix "$OUTPUT_CLUSTERING_PREFIX" \
-                    --pre-proc-threshold "$T" \
-                    --alg $ALG >> "$STDOUT_FILE"
+                    for TRD in 1 2 4 8 16 32 64 128
+                    do
+                        export OMP_NUM_THREADS=$TRD
+                        export OMP_PLACES=cores
+                        T=0.99
+                        $BIN --graph-file "$GRAPH_FILE" \
+                        --input-prefix "$INPUT_CLUSTERING_PREFIX" \
+                        --k "$NUMBER_OF_INPUT_CLUSTERING" \
+                        --output-prefix "$OUTPUT_CLUSTERING_PREFIX" \
+                        --pre-proc-threshold "$T" \
+                        --alg $ALG >> "$STDOUT_FILE"."$TRD"
+                    done
                 else
                     $BIN --graph-file "$GRAPH_FILE" \
                     --input-prefix "$INPUT_CLUSTERING_PREFIX" \
