@@ -1,8 +1,7 @@
 #!/bin/bash -l
 
-PROJECT_DIR=$HOME/Codes/fmccg
-#DATA_DIR=$PROJECT_DIR/test/data
-DATA_DIR=$SCRATCH/fmccg-data
+PROJECT_DIR=$HOME/Codes/graph-consensus-clustering
+DATA_DIR=$PROJECT_DIR/test/data
 RESULT_DIR=$PROJECT_DIR/test/experiment-results/runtime-study
 
 #export OMP_NUM_THREADS=8
@@ -18,10 +17,10 @@ for DATASET_NAME in LFR-louvain
 do
     
     #for ALG in v8 boem saoem
-    #for ALG in lancichinetti-fortunato
+    for ALG in lancichinetti-fortunato
     #for ALG in kirkley-newman
     #for ALG in v8-parallel
-    for ALG in boem
+    #for ALG in boem
     do
 
         for N in 200 1000 5000 25000 125000

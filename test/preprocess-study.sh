@@ -15,7 +15,9 @@ mkdir -p $OUTPUT_DIR
 
 echo $OUTPUT_DIR
 
-for DATASET_NAME in LFR
+#for DATASET_NAME in LFR-louvain
+#for DATASET_NAME in LFR-louvain-1 LFR-louvain-2 LFR-louvain-3 LFR-louvain-4 LFR-louvain-5 LFR-louvain-6 LFR-louvain-7 LFR-louvain-8 LFR-louvain-9 LFR-louvain-10
+for DATASET_NAME in LFR-1 LFR-2 LFR-3 LFR-4 LFR-5 LFR-6 LFR-7 LFR-8 LFR-9 LFR-10
 do
     #for N in 200 1000 5000
     for N in 5000

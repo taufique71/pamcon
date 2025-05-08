@@ -279,7 +279,12 @@ if __name__=="__main__":
         # partition_lst = clust_asn_to_lst(partition_asn)
         # Q = nx.community.modularity(G, partition_lst)
         # energies.append(Q)
+
+    t0 = time.time()
     cons_asn = lf_louvain(partitions)
+    t1 = time.time()
+    print("Time to make consensus:", t1-t0, "seconds")
+
     cons_lst = clust_asn_to_lst(cons_asn)
     # print(cons_lst)
     write_clust_lst(cons_lst, output_prefix + ".soln-0")

@@ -1,6 +1,6 @@
 Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n1000/LFR_n1000_mu01_gamma30_beta11.mtx
 Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n1000/LFR_n1000_mu01_gamma30_beta11
 Number of input clusterings: 16
-Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/kirkley-newman.LFR-louvain.n1000.mu01/LFR_n1000_mu01_gamma30_beta11
-32 clusters in solution 0 brings consensus of 16 partitions
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/benchmark-study/kirkley-newman.LFR-louvain.n1000.mu01/LFR_n1000_mu01_gamma30_beta11
+35 clusters in solution 0 brings consensus of 16 partitions
 soln-0 [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]

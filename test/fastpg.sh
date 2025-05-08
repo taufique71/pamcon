@@ -1,22 +1,26 @@
 #!/bin/bash -l
 
-PROJECT_DIR=$HOME/Codes/fmccg
-DATA_DIR=$SCRATCH/fastpg-dataset/UNC_DATASET/Metis_Format
-RESULT_DIR=$PROJECT_DIR/test/experiment-results/runtime-study
+PROJECT_DIR=$HOME/Codes/graph-consensus-clustering
+DATA_DIR=/home/mth/Data/UNC_DATASET/Metis_Format
+RESULT_DIR=$PROJECT_DIR/test/experiment-results/fastpg
 
 #export OMP_NUM_THREADS=8
 #export OMP_PLACES=cores
 
-ALG=v8-parallel
 BIN=$PROJECT_DIR/consensus
+KIRKLEY_NEWMAN_SCRIPT=$PROJECT_DIR/Kirkley-Newman/main.py
+LANCICHINETTI_FORTUNATO_SCRIPT=$PROJECT_DIR/Lancichinetti-Fortunato/main.py
 STDOUT_PREFIX=$PROJECT_DIR/stdout.FASTPG
 
 #for ALG in v8 v8-parallel
-for ALG in v8-parallel
+#for ALG in v8-parallel
+for ALG in kirkley-newman
 do
     #for DATA_NAME in Levine13_dimNetworkMetis Levine32_dimNetworkMetis Samusik_01NetworkMetis Samusik_allNetworkMetis
     for DATA_NAME in Samusik_allNetworkMetis
+    #for DATA_NAME in Samusik_01NetworkMetis
     #for DATA_NAME in Levine13_dimNetworkMetis 
+    #for DATA_NAME in Levine32_dimNetworkMetis 
     do
         OUTPUT_DIR_NAME="$ALG"."$DATA_NAME"
         OUTPUT_DIR="$RESULT_DIR"/"$OUTPUT_DIR_NAME"
@@ -69,13 +73,23 @@ do
             echo ::: Running with $TRD threads :::
             export OMP_NUM_THREADS=$TRD
             export OMP_PLACES=cores
-            T=0.99
-            $BIN --graph-file "$GRAPH_FILE" \
-            --input-prefix "$INPUT_CLUSTERING_PREFIX" \
-            --k "$NUMBER_OF_INPUT_CLUSTERING" \
-            --output-prefix "$OUTPUT_CLUSTERING_PREFIX" \
-            --pre-proc-threshold "$T" \
-            --alg $ALG >> "$STDOUT_FILE"."$TRD"
+            if [ "$ALG" == "kirkley-newman" ]; then
+                source /home/mth/.venv/bin/activate
+                python $KIRKLEY_NEWMAN_SCRIPT --graph-file "$GRAPH_FILE" \
+                --input-prefix "$INPUT_CLUSTERING_PREFIX" \
+                --k "$NUMBER_OF_INPUT_CLUSTERING" \
+                --output-prefix "$OUTPUT_CLUSTERING_PREFIX" \
+                --alg $ALG >> "$STDOUT_FILE"
+                deactivate
+            elif [ "$ALG" == "v8-parallel" ]; then
+                T=0.99
+                $BIN --graph-file "$GRAPH_FILE" \
+                --input-prefix "$INPUT_CLUSTERING_PREFIX" \
+                --k "$NUMBER_OF_INPUT_CLUSTERING" \
+                --output-prefix "$OUTPUT_CLUSTERING_PREFIX" \
+                --pre-proc-threshold "$T" \
+                --alg $ALG >> "$STDOUT_FILE"."$TRD"
+            fi
         done
     done
 done

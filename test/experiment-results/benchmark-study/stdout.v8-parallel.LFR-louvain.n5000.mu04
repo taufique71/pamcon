@@ -1,31 +1,23 @@
 Graph: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n5000/LFR_n5000_mu04_gamma30_beta11.mtx
 Input clustering prefix: /u/mth/Codes/graph-consensus-clustering/test/data/LFR-louvain/n5000/LFR_n5000_mu04_gamma30_beta11
 Number of input clusterings: 16
-Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/v8-parallel.LFR-louvain.n5000.mu04/LFR_n5000_mu04_gamma30_beta11
+Output file prefix: /u/mth/Codes/graph-consensus-clustering/test/experiment-results/benchmark-study/v8-parallel.LFR-louvain.n5000.mu04/LFR_n5000_mu04_gamma30_beta11
 Algorithm to use: v8-parallel
-Pre process threshold: 0.35
+Pre process threshold: 0.45
 CSC matrix:  Rows= 5000 Columns= 5000 nnz= 26872
-Time to read input graph: 0.079028
+Time to read input graph: 0.078839
 Directed
-Time to make undirected: 0.001127
-Time to read input clusterings: 0.018926
-262 clusters in solution 0, brings consensus of 7 partitions
-soln-0: consensus of [8, 9, 10, 12, 13, 14, 15, ]
-61 clusters in solution 1, brings consensus of 1 partitions
-soln-1: consensus of [11, ]
-45 clusters in solution 2, brings consensus of 1 partitions
-soln-2: consensus of [7, ]
-42 clusters in solution 3, brings consensus of 1 partitions
-soln-3: consensus of [6, ]
-48 clusters in solution 4, brings consensus of 1 partitions
-soln-4: consensus of [5, ]
-44 clusters in solution 5, brings consensus of 1 partitions
-soln-5: consensus of [4, ]
-105 clusters in solution 6, brings consensus of 1 partitions
-soln-6: consensus of [3, ]
-111 clusters in solution 7, brings consensus of 1 partitions
-soln-7: consensus of [2, ]
-97 clusters in solution 8, brings consensus of 1 partitions
-soln-8: consensus of [1, ]
-32 clusters in solution 9, brings consensus of 1 partitions
-soln-9: consensus of [0, ]
+Time to make undirected: 0.001125
+Time to read input clusterings: 0.038276
+v8-parallel: 0.164252 seconds
+280 clusters in solution 0, brings consensus of 13 partitions
+soln-0: consensus of [0, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13, 14, 15, ]
+v8-parallel: 0.000010 seconds
+46 clusters in solution 1, brings consensus of 1 partitions
+soln-1: consensus of [12, ]
+v8-parallel: 0.000011 seconds
+46 clusters in solution 2, brings consensus of 1 partitions
+soln-2: consensus of [8, ]
+v8-parallel: 0.000013 seconds
+49 clusters in solution 3, brings consensus of 1 partitions
+soln-3: consensus of [1, ]

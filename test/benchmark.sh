@@ -11,20 +11,22 @@ BIN=$PROJECT_DIR/consensus
 KIRKLEY_NEWMAN_SCRIPT=$PROJECT_DIR/Kirkley-Newman/main.py
 LANCICHINETTI_FORTUNATO_SCRIPT=$PROJECT_DIR/Lancichinetti-Fortunato/main.py
 
-for DATASET_NAME in LFR-louvain LFR
-#for DATASET_NAME in LFR-preprocessed
-#for DATASET_NAME in LFR-louvain
+#for DATASET_NAME in LFR-louvain LFR
+#for DATASET_NAME in LFR-1
+for DATASET_NAME in LFR-louvain-1 LFR-louvain-2 LFR-louvain-3 LFR-louvain-4 LFR-louvain-5 LFR-louvain-6 LFR-louvain-7 LFR-louvain-8 LFR-louvain-9 LFR-louvain-10
+#for DATASET_NAME in LFR-1 LFR-2 LFR-3 LFR-4 LFR-5 LFR-6 LFR-7 LFR-8 LFR-9 LFR-10
 do
     
     #for ALG in v8 boem saoem
-	#for ALG in lancichinetti-fortunato
-	#for ALG in kirkley-newman boem v8-parallel
 	#for ALG in v8-parallel
-    for ALG in boem
+	#for ALG in lancichinetti-fortunato
+    for ALG in kirkley-newman
+    #for ALG in v8-parallel
+    #for ALG in boem
     do
 
-        for N in 1000 5000
-        #for N in 5000
+        #for N in 1000 5000
+        for N in 5000
         do
             for MU in 01 02 03 04 05 06 07
             #for MU in 04
@@ -61,6 +63,7 @@ do
                 
                 if [ "$ALG" == "kirkley-newman" ]; then
                     source /home/mth/.venv/bin/activate
+                    timeout --kill-after=30m 30m \
                     python $KIRKLEY_NEWMAN_SCRIPT --graph-file "$GRAPH_FILE" \
                     --input-prefix "$INPUT_CLUSTERING_PREFIX" \
                     --k "$NUMBER_OF_INPUT_CLUSTERING" \
@@ -78,31 +81,32 @@ do
                     # boem and v8-parallel
                     # Default threshold
                     T=0.45
+                    #T=0.99
 
-                    # Threshold parameter picked for different benchmark dataset from preprocessing studies
-                    if [ $DATASET_NAME == "LFR-louvain" ]; then
-                        if [ $N == "1000" ]; then
-                            case "$MU" in
-                                "01") T=0.05;;
-                                "02") T=0.05;;
-                                "03") T=0.15;;
-                                "04") T=0.3;;
-                                "05") T=0.5;;
-                                "06") T=0.65;;
-                                "07") T=0.75;;
-                            esac
-                        elif [ $N == "5000" ]; then
-                            case "$MU" in
-                                "01") T=0.15;;
-                                "02") T=0.15;;
-                                "03") T=0.3;;
-                                "04") T=0.45;;
-                                "05") T=0.65;;
-                                "06") T=0.8;;
-                                "07") T=0.8;;
-                            esac
-                        fi
-                    fi
+                    ## Threshold parameter picked for different benchmark dataset from preprocessing studies
+                    #if [ $DATASET_NAME == "LFR-louvain" ]; then
+                        #if [ $N == "1000" ]; then
+                            #case "$MU" in
+                                #"01") T=0.05;;
+                                #"02") T=0.05;;
+                                #"03") T=0.15;;
+                                #"04") T=0.3;;
+                                #"05") T=0.5;;
+                                #"06") T=0.65;;
+                                #"07") T=0.75;;
+                            #esac
+                        #elif [ $N == "5000" ]; then
+                            #case "$MU" in
+                                #"01") T=0.15;;
+                                #"02") T=0.15;;
+                                #"03") T=0.3;;
+                                #"04") T=0.45;;
+                                #"05") T=0.65;;
+                                #"06") T=0.8;;
+                                #"07") T=0.8;;
+                            #esac
+                        #fi
+                    #fi
                     $BIN --graph-file "$GRAPH_FILE" \
                     --input-prefix "$INPUT_CLUSTERING_PREFIX" \
                     --k "$NUMBER_OF_INPUT_CLUSTERING" \

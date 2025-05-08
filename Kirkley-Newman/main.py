@@ -152,9 +152,13 @@ if __name__=="__main__":
         Q = nx.community.modularity(G, partition_lst)
         energies.append(Q)
     
+    t0 = time.time()
     results = kn.partition_clustering(G_igraph,partitions,energies, num_mcs = 30,num_init_modes = 1,initial_runs = 10,\
                                     manual_mode_scale = -1.,dist_percentile = -1.,fix_K = 0,consecutive_rejects = 100,\
                                                             max_local_moves = 10,Lambda = 0.,graph_plots = False,node_size = 5,Kprior=1,MItype=1,mode_info_type=0)
+    t1 = time.time()
+
+    print("Time to find representatives:", t1-t0, "seconds")
     
     component_ranking = []
     for i in range(len(results[0])):
