@@ -1,0 +1,43 @@
+Graph: /Samusik_allNetworkMetis.mtx
+Input clustering prefix: /Samusik_allNetworkMetis
+Number of input clusterings: 0
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/v8-parallel.Samusik_allNetworkMetis/Samusik_allNetworkMetis
+Algorithm to use: v8-parallel
+Pre process threshold: 0.99
+Graph: /Samusik_allNetworkMetis.mtx
+Input clustering prefix: /Samusik_allNetworkMetis
+Number of input clusterings: 0
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/v8-parallel.Samusik_allNetworkMetis/Samusik_allNetworkMetis
+Algorithm to use: v8-parallel
+Pre process threshold: 0.99
+Graph: /Samusik_allNetworkMetis.mtx
+Input clustering prefix: /Samusik_allNetworkMetis
+Number of input clusterings: 0
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/v8-parallel.Samusik_allNetworkMetis/Samusik_allNetworkMetis
+Algorithm to use: v8-parallel
+Pre process threshold: 0.99
+Graph: /pscratch/sd/t/taufique/fastpg-dataset/UNC DATASET/Metis Format/Samusik_allNetworkMetis.mtx
+Input clustering prefix: /pscratch/sd/t/taufique/fastpg-dataset/UNC DATASET/Metis Format/Samusik_allNetworkMetis
+Number of input clusterings: 0
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/v8-parallel.Samusik_allNetworkMetis/Samusik_allNetworkMetis
+Algorithm to use: v8-parallel
+Pre process threshold: 0.99
+CSC matrix:  Rows= 514386 Columns= 514386 nnz= 11970593
+Time to read input graph: 3.446510
+Directed
+Time to make undirected: 0.370187
+Time to read input clusterings: 0.000000
+Graph: /pscratch/sd/t/taufique/fastpg-dataset/UNC_DATASET/Metis_Format/Samusik_allNetworkMetis.mtx
+Input clustering prefix: /pscratch/sd/t/taufique/fastpg-dataset/UNC_DATASET/Metis_Format/Samusik_allNetworkMetis
+Number of input clusterings: 16
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/v8-parallel.Samusik_allNetworkMetis/Samusik_allNetworkMetis
+Algorithm to use: v8-parallel
+Pre process threshold: 0.99
+CSC matrix:  Rows= 514386 Columns= 514386 nnz= 11970593
+Time to read input graph: 3.356421
+Directed
+Time to make undirected: 0.359643
+Time to read input clusterings: 0.360705
+v8-parallel: 225.039627 seconds
+78 clusters in solution 0, brings consensus of 16 partitions
+soln-0: consensus of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ]

@@ -1,0 +1,12 @@
+Graph: /pscratch/sd/t/taufique/fmccg-data/LFR-louvain/n25000/LFR_n25000_mu04_gamma30_beta11.mtx
+Input clustering prefix: /pscratch/sd/t/taufique/fmccg-data/LFR-louvain/n25000/LFR_n25000_mu04_gamma30_beta11
+Number of input clusterings: 16
+Output file prefix: /global/homes/t/taufique/Codes/fmccg/test/experiment-results/runtime-study/boem.LFR-louvain.n25000.mu04/LFR_n25000_mu04_gamma30_beta11
+Algorithm to use: boem
+Pre process threshold: 1
+CSC matrix:  Rows= 25000 Columns= 25000 nnz= 135209
+Time to read input graph: 0.774288
+Directed
+Time to make undirected: 1.408786
+Time to read input clusterings: 0.058063
+BOEM: 28.491077 seconds
