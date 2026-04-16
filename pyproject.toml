@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools", "pybind11>=2.10"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pamcon"
+version = "0.1.0"
+description = "Parallel Median Consensus Clustering in Complex Networks"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+networkx = ["networkx"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pamcon*"]

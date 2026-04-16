@@ -1,6 +1,12 @@
 .ipynb_checkpoints/
 *.o
 *.swp
+*.so
 consensus
+consensus-research
 dist-distribution
 preprocess
+build/
+pamcon.egg-info/
+__pycache__/
+*.pyc

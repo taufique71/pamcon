@@ -49,15 +49,21 @@ RefinedClustering.o : $(CONPAS_DIR)/RefinedClustering.h $(CONPAS_DIR)/RefinedClu
 mmio.o: $(NIST_DIR)/mmio.c
 	$(CC) $(CFLAGS) -c -o mmio.o $(NIST_DIR)/mmio.c
 
+main_user.o: main_user.cpp
+	$(CC) $(CFLAGS) -c -o main_user.o main_user.cpp
+
+consensus: main_user.o mmio.o
+	$(CC) $(CFLAGS) -o consensus main_user.o mmio.o -lm
+
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c -o main.o main.cpp \
-		-I$(IGRAPH_DIR)/include/igraph 
+		-I$(IGRAPH_DIR)/include/igraph
 
-consensus: main.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
-	$(CC) $(CFLAGS) -o consensus *.o \
+consensus-research: main.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
+	$(CC) $(CFLAGS) -o consensus-research main.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o \
 		-L$(IGRAPH_DIR)/lib64 \
 		-L$(ARPACK_DIR) \
-		-ligraph -lm -larpack 
+		-ligraph -lm -larpack
 
 
 dist-distribution: dist-distribution.cpp
@@ -79,11 +85,12 @@ preprocess: preprocess.cpp
 kn: $(KN_DIR)/kn.pyx
 	cythonize -a -i Kirkley-Newman/kn.pyx
 
-all: consensus dist-distribution preprocess
+all: consensus consensus-research dist-distribution preprocess
 
 clean:
 	rm -f *.o
 	rm -f consensus
+	rm -f consensus-research
 	rm -f dist-distribution
 	rm -f preprocess
 	#rm -r $(KN_DIR)/kn
