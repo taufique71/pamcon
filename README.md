@@ -98,19 +98,46 @@ make consensus
             [--verbose]
 ```
 
-- `--graph-file`: Input graph in Matrix Market format (`.mtx`)
-- `--input-prefix`: Prefix for clustering files, expected as `<prefix>.0`, `<prefix>.1`, ..., `<prefix>.(k-1)`
-- `--k`: Number of input clusterings
-- `--output-prefix`: Output file prefix — consensus written to `<prefix>.soln`
-- `--niter`: Maximum iterations (default: 100)
-- `--verbose`: Print per-iteration progress
+### Parameters
 
-Control threads via `OMP_NUM_THREADS`:
-```bash
-OMP_NUM_THREADS=8 ./consensus --graph-file graph.mtx ...
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `--graph-file` | Yes | Input graph in Matrix Market format (`.mtx`) |
+| `--input-prefix` | Yes | Path prefix for input clustering files (see format below) |
+| `--k` | Yes | Number of input clusterings |
+| `--output-prefix` | Yes | Path prefix for output file |
+| `--niter` | No | Maximum number of iterations (default: 100) |
+| `--verbose` | No | Print detailed progress per iteration |
+| `--help` | No | Show usage message |
+
+### Input clustering file format
+
+Clustering files must be named `<prefix>.0`, `<prefix>.1`, ..., `<prefix>.(k-1)`.
+
+Each file represents one clustering. Each **line** corresponds to one cluster and contains the **space-separated 0-indexed vertex IDs** belonging to that cluster:
+
+```
+0 4 7 12
+1 3 9
+2 5 6 8 10 11
 ```
 
-Run `./consensus --help` for full usage.
+### Output format
+
+The consensus clustering is written to `<output-prefix>.soln` in the same format — one cluster per line, space-separated vertex IDs.
+
+### Example
+
+```bash
+# Run consensus on a graph with 10 input clusterings using 8 threads
+OMP_NUM_THREADS=8 ./consensus \
+    --graph-file graph.mtx \
+    --input-prefix clusterings/run \
+    --k 10 \
+    --output-prefix results/consensus
+```
+
+This expects files `clusterings/run.0` through `clusterings/run.9` and writes the result to `results/consensus.soln`.
 
 ---
 
