@@ -1,9 +1,10 @@
 LOCAL_HOME_DIR = /home/mth
-PROJECT_DIR = $(HOME)/Codes/graph-consensus-clustering
+PROJECT_DIR = $(HOME)/Codes/fmccg
 NIST_DIR = $(PROJECT_DIR)/NIST
 CONPAS_DIR = $(PROJECT_DIR)/CONPAS
 KN_DIR=$(PROJECT_DIR)/Kirkley-Newman
-IGRAPH_DIR = $(LOCAL_HOME_DIR)/Software/igraph-0.10.6/install
+IGRAPH_DIR = $(HOME)/Codes/igraph-0.10.12/_install
+ARPACK_DIR = $(HOME)/Codes/arpack
 
 CFLAGS = -std=c++11 -O3 -fopenmp -fpermissive -ffast-math -fomit-frame-pointer -msse -mmmx  
 #CFLAGS = -std=c++11 -g -O0 -fopenmp -fpermissive -ffast-math -fomit-frame-pointer -msse -mmmx  
@@ -54,21 +55,24 @@ main.o: main.cpp
 
 consensus: main.o mmio.o AdjBestOfK.o AverageLink.o BestOfK.o CCOptimal.o MajorityRule.o MersenneTwister.o SetPartition.o SetPartitionVector.o Utility.o CCPivot.o CCAverageLink.o RefinedClustering.o
 	$(CC) $(CFLAGS) -o consensus *.o \
-		-L$(IGRAPH_DIR)/lib \
+		-L$(IGRAPH_DIR)/lib64 \
+		-L$(ARPACK_DIR) \
 		-ligraph -lm -larpack 
 
 
 dist-distribution: dist-distribution.cpp
 	$(CC) $(CFLAGS) dist-distribution.cpp \
 		-I$(IGRAPH_DIR)/include/igraph \
-		-L$(IGRAPH_DIR)/lib \
+		-L$(IGRAPH_DIR)/lib64 \
+		-L$(ARPACK_DIR) \
 		-ligraph -lm -larpack \
 		-o dist-distribution
 
 preprocess: preprocess.cpp
 	$(CC) $(CFLAGS) preprocess.cpp \
 		-I$(IGRAPH_DIR)/include/igraph \
-		-L$(IGRAPH_DIR)/lib \
+		-L$(IGRAPH_DIR)/lib64 \
+		-L$(ARPACK_DIR) \
 		-ligraph -lm -larpack \
 		-o preprocess
 

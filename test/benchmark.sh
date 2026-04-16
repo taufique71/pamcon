@@ -1,7 +1,8 @@
 #!/bin/bash -l
 
 PROJECT_DIR=$HOME/Codes/graph-consensus-clustering
-DATA_DIR=$PROJECT_DIR/test/data
+#DATA_DIR=$PROJECT_DIR/test/data
+DATA_DIR=$SCRATCH/fmccg-data
 RESULT_DIR=$PROJECT_DIR/test/experiment-results/benchmark-study
 
 export OMP_NUM_THREADS=8
