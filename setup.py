@@ -1,7 +1,27 @@
 import sys
 import subprocess
 from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext as _build_ext
 import pybind11
+
+
+class build_ext(_build_ext):
+    """Strip C++-only flags when compiling plain C sources."""
+    _cpp_only = {"-std=c++11", "-fpermissive"}
+
+    def build_extension(self, ext):
+        original = self.compiler._compile
+
+        def patched(obj, src, ext_name, cc_args, extra_postargs, pp_opts):
+            if src.endswith(".c"):
+                extra_postargs = [a for a in extra_postargs if a not in self._cpp_only]
+            original(obj, src, ext_name, cc_args, extra_postargs, pp_opts)
+
+        self.compiler._compile = patched
+        try:
+            super().build_extension(ext)
+        finally:
+            self.compiler._compile = original
 
 def get_openmp_flags():
     """Return (compile_args, link_args, include_dirs) for OpenMP on current platform."""
@@ -63,4 +83,5 @@ ext = Extension(
 
 setup(
     ext_modules=[ext],
+    cmdclass={"build_ext": build_ext},
 )
