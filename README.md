@@ -6,6 +6,16 @@ Implementation of our work published in Nature Scientific Reports:
 
 ---
 
+## What is this?
+
+Community detection algorithms are often non-deterministic — running the same algorithm multiple times, or different algorithms on the same graph, produces different results. **Consensus clustering** combines k input clusterings into a single stable result that minimizes the total Rand distance to all inputs.
+
+**pamcon** is the first algorithm designed specifically for graphs that actively optimizes this objective. It uses a greedy local search heuristic that exploits graph connectivity structure, parallelized with OpenMP. The parallelism is essential — without it the algorithm is computationally intractable for large graphs.
+
+See the paper for full algorithmic details and benchmarks.
+
+---
+
 ## Python Package (Recommended)
 
 ### Installation
@@ -17,6 +27,12 @@ pip install -e .
 ```
 
 **Requirements:** Python >= 3.8, numpy, scipy, a C++ compiler with OpenMP support.
+
+| Platform | Support | Notes |
+|----------|---------|-------|
+| Linux    | Full    | Works out of the box. `g++` and OpenMP are standard. |
+| macOS    | Full    | Requires `brew install libomp` before installing pamcon. |
+| Windows  | Not supported | — |
 
 For NetworkX support:
 ```bash
@@ -66,7 +82,39 @@ result = pamcon.consensus(G, clusterings)
 ### Examples
 
 - **`example.py`** — Simple example using the karate club graph with label propagation and Louvain clusterings
-- **`example_large.py`** — Large-scale example: LFR benchmark graph (n=5000, mu=0.3), Louvain with varying resolution parameters, sequential vs parallel runtime comparison
+- **`example_large.py`** — Demonstrates the scipy sparse interface on an LFR benchmark graph (n=5000, mu=0.4) with 16 input clusterings. Also shows the parallel speedup benefit:
+
+```
+Loading LFR benchmark graph (n=5000, mu=0.4) ...
+  5000 nodes, 102571 edges
+Loading 16 input clusterings ...
+  Clustering 0: 1 clusters
+  Clustering 1: 55 clusters
+  Clustering 2: 309 clusters
+  Clustering 3: 4999 clusters
+  Clustering 4: 10 clusters
+  Clustering 5: 87 clusters
+  Clustering 6: 49 clusters
+  Clustering 7: 61 clusters
+  Clustering 8: 52 clusters
+  Clustering 9: 56 clusters
+  Clustering 10: 75 clusters
+  Clustering 11: 71 clusters
+  Clustering 12: 94 clusters
+  Clustering 13: 95 clusters
+  Clustering 14: 184 clusters
+  Clustering 15: 156 clusters
+
+Running consensus with 1 thread ...
+  Consensus: 219 clusters
+  Runtime (1 thread):  1.837 seconds
+
+Running consensus with 8 threads ...
+  Consensus: 219 clusters
+  Runtime (8 threads): 0.202 seconds
+```
+
+9x speedup with 8 threads — same consensus result.
 
 ```bash
 python example.py
