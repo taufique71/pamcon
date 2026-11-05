@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <stdexcept>
 
 #include "COO.h" // To maintain consensus graph
 #include "CSC.h" // To maintain consensus graph
@@ -807,6 +808,437 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
     if(verbose) printf("[parallel_consensus_v8]\t\ttSearch %lf\n", tSearch );
     if(verbose) printf("[parallel_consensus_v8]\t\ttValidate %lf\n", tValidate );
     if(verbose) printf("[parallel_consensus_v8]\t\ttMove %lf\n", tMove );
+
+    return clust_asn;
+}
+
+/*
+ * Parallel consensus clustering that discounts singleton votes on graph edges
+ * Input: graph, cluster assignment matrix and max_singleton_votes
+ *
+ * Same as parallel_consensus_v8, except for the term used for a pair (u, v) in deltaS:
+ *      edge in the graph: K_uv - 2 * agree(u, v), where K_uv = k - min(s_uv, max_singleton_votes)
+ *      no edge:           k - 2 * agree(u, v)
+ * s_uv is the number of input partitions in which u or v is a singleton cluster.
+ * max_singleton_votes = 0 gives the same terms as parallel_consensus_v8.
+ * */
+vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &graph, vector< vector<uint32_t> > &C, int max_singleton_votes, int niter=10, bool verbose=false){
+    if(max_singleton_votes < 0){
+        throw std::invalid_argument("v8-cvc requires max_singleton_votes >= 0.");
+    }
+
+    double t0, t1, t2, t3, t4, t5, t6, t7, t8, t9;
+    double tInit = 0;
+    double tSearch = 0;
+    double tValidate = 0;
+    double tMove = 0;
+
+    uint32_t n = graph.get_nrows(); // Number of vertices in the graph
+    uint32_t nnz = graph.get_nnz(); // Number of edges in the graph
+    uint32_t k = C[0].size(); // Number of input clustering
+    
+    if(k < 2){
+        // Make a copy of the cluster assignment
+        vector<uint32_t> clust_asn(n);
+        for (int i = 0; i < C.size(); i++){
+            clust_asn[i] = C[i][0];
+        }
+        relabel_clust_asn(clust_asn); // In case input contains non-continuous labels
+        return clust_asn; // Return
+    }
+
+    int nthread;
+    #pragma omp parallel
+    {
+        nthread = omp_get_num_threads();
+    }
+
+    t2 = omp_get_wtime();
+
+    /*
+     * Prepare weighted graph, weighted by the cluster agreement value
+     * We call it consensus graph
+     * */
+    t0 = omp_get_wtime();
+    
+    CSC<uint32_t, uint32_t, uint32_t>csc;
+    {
+        // Need to be pvector because COO and CSC data structures require it
+        pvector<uint32_t> nzRows(graph.get_nnz());
+        pvector<uint32_t> nzCols(graph.get_nnz());
+        pvector<uint32_t> nzVals(graph.get_nnz());
+        
+        uint32_t idx = 0;
+        for(int col = 0; col < graph.get_ncols(); col++){
+            uint32_t colStart = (*graph.get_colPtr())[col];
+            uint32_t colEnd = (*graph.get_colPtr())[col+1];
+            for(int i = colStart; i < colEnd; i++){
+                uint32_t row = (*graph.get_rowIds())[i];
+                vector<bool> eq = ewise_equal<uint32_t>(C[col], C[row]);
+                uint32_t sum = accumulate(eq.begin(), eq.end(), 0);
+
+                nzRows[idx] = row;
+                nzCols[idx] = col;
+                nzVals[idx] = sum;
+                idx++;
+            }
+        }
+
+        COO<uint32_t, uint32_t, uint32_t>coo(
+                graph.get_nrows(), graph.get_ncols(), graph.get_nnz(), 
+                &nzRows, &nzCols, &nzVals, 
+                true);
+
+        csc = CSC<uint32_t, uint32_t, uint32_t>(coo);
+    }
+
+    t1 = omp_get_wtime();
+    if(verbose) printf("[parallel_consensus_v8_cvc] Time to prepare the consensus graph: %lf\n", t1-t0);
+
+    /*
+     * For every edge (u, v) find how much K_uv is lower than k: min(s_uv, max_singleton_votes)
+     * Stored at the same position as the edge in the consensus graph
+     * */
+    t0 = omp_get_wtime();
+    vector< vector<bool> > is_singleton(n, vector<bool>(k, false));
+    vector<uint32_t> clust_size(n); // Cluster labels are assumed to be 0, 1, 2, ...
+    for(uint32_t j = 0; j < k; j++){
+        std::fill(clust_size.begin(), clust_size.end(), 0);
+        for(uint32_t u = 0; u < n; u++){
+            clust_size[C[u][j]]++;
+        }
+        for(uint32_t u = 0; u < n; u++){
+            is_singleton[u][j] = (clust_size[C[u][j]] == 1);
+        }
+    }
+
+    vector<int> edge_reduction(csc.get_nnz(), 0);
+    for(uint32_t u = 0; u < n; u++){
+        for(uint32_t i = (*csc.get_colPtr())[u]; i < (*csc.get_colPtr())[u+1]; i++){
+            uint32_t v = (*csc.get_rowIds())[i];
+            int s = 0;
+            for(uint32_t j = 0; j < k; j++){
+                if(is_singleton[u][j] || is_singleton[v][j]) s++;
+            }
+            edge_reduction[i] = std::min(s, max_singleton_votes);
+        }
+    }
+    t1 = omp_get_wtime();
+    if(verbose) printf("[parallel_consensus_v8_cvc] Time to prepare edge reductions: %lf\n", t1-t0);
+
+    vector<int> reduction_by_cluster(n, 0); // Working array, all zeros between uses
+
+    if(verbose) csc.PrintInfo();
+    const pvector<uint32_t>* colPtr = csc.get_colPtr();
+    const pvector<uint32_t>* rowIds = csc.get_rowIds();
+    const pvector<uint32_t>* nzVals = csc.get_nzVals();
+
+    /* 
+     * Initialize singleton clusters
+     * */
+    t0 = omp_get_wtime();
+    vector<uint32_t> clust_asn(n);
+    for(uint32_t i = 0; i < n; i++){
+        clust_asn[i] = i;
+    }
+    vector< vector<uint32_t> > clust_lst = clust_asn_to_lst(clust_asn);
+    t1 = omp_get_wtime();
+    tInit = t1-t0;
+    
+    // A vector containing valid moves
+    // Used to store the moves in previous iteration
+    // Helps to detect one-step circular moves
+    vector<bool> last_valid(n, false);
+    vector<int> last_deltaS(n, 0);
+
+    for(int it = 1; it <= niter; it++){
+        if(verbose) printf("[parallel_consensus_v8_cvc] >>> Iteration: %d\n", it);
+
+        potential_moves pm(n);
+        
+        t0 = omp_get_wtime();
+        // Figure out edges to be probed
+        // Maintain a list of edges to be probed for each vertex
+        // Effectively a vector of vectors of tuples
+        uint32_t nnz_to_probe=0;
+        vector< vector< tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> > > nz_to_probe(n);
+        for(uint32_t u = 0; u < n; u++){
+            uint32_t a = clust_asn[u];
+            vector< tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> > potential_nz_for_u;
+            for(uint32_t j = (*colPtr)[u]; j < (*colPtr)[u+1]; j++ ){
+                uint32_t v = (*rowIds)[j];
+                uint32_t w = (*nzVals)[j];
+                uint32_t b = clust_asn[v];
+
+                if(a!=b) potential_nz_for_u.push_back( make_tuple(u, a, v, b, w) );
+            }
+            // Keep the list in sorted order such that lowest b appear first; tiebreak with highest w.
+            sort(potential_nz_for_u.begin(), potential_nz_for_u.end(), 
+                 [] (tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> &lhs, 
+                     tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> &rhs){
+                        auto lhs_b = get<3>(lhs);
+                        auto lhs_w = get<4>(lhs);
+                        auto rhs_b = get<3>(rhs);
+                        auto rhs_w = get<4>(rhs);
+                        if (lhs_b < rhs_b){
+                            return true;
+                        }
+                        else{
+                            if (lhs_b > rhs_b){
+                                return false;
+                            }
+                            else return(lhs_w > rhs_w);
+                        }
+                }
+            );
+            // Find unique (u,b) pairs
+            for(auto j = 0; j < potential_nz_for_u.size(); ){
+                uint32_t b = get<3>(potential_nz_for_u[j]);
+                nz_to_probe[u].push_back( tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t>(potential_nz_for_u[j]) );
+                while( (j < potential_nz_for_u.size()) && (get<3>(potential_nz_for_u[j]) == b) ) j++;
+            }
+        }
+
+        t1 = omp_get_wtime();
+        tSearch += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to figure out edges to be probed %lf\n", t1-t0);
+
+        // For each vertex u, add up the edge reductions per neighboring cluster
+        // reduction_to_probe[u][j] belongs to the cluster of nz_to_probe[u][j]
+        // reduction_in_own_cluster[u] belongs to the current cluster of u
+        t0 = omp_get_wtime();
+        vector< vector<int> > reduction_to_probe(n);
+        vector<int> reduction_in_own_cluster(n, 0);
+        for(uint32_t u = 0; u < n; u++){
+            for(uint32_t j = (*colPtr)[u]; j < (*colPtr)[u+1]; j++){
+                uint32_t v = (*rowIds)[j];
+                if(u != v){ // A vertex never pairs with itself in deltaS, so skip self-loops
+                    reduction_by_cluster[clust_asn[v]] += edge_reduction[j];
+                }
+            }
+            reduction_in_own_cluster[u] = reduction_by_cluster[clust_asn[u]];
+            reduction_to_probe[u].resize(nz_to_probe[u].size());
+            for(auto j = 0; j < nz_to_probe[u].size(); j++){
+                reduction_to_probe[u][j] = reduction_by_cluster[get<3>(nz_to_probe[u][j])];
+            }
+            for(uint32_t j = (*colPtr)[u]; j < (*colPtr)[u+1]; j++){
+                reduction_by_cluster[clust_asn[(*rowIds)[j]]] = 0;
+            }
+        }
+        t1 = omp_get_wtime();
+        tSearch += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to add up edge reductions %lf\n", t1-t0);
+
+        // Get the distribution of number of edges to probe per vertex
+        // Would be used to prepare the vector of edges to probe
+        std::vector<int64_t> dstrb_nnz_to_probe(n);
+        std::vector<int64_t> ps_dstrb_nnz_to_probe(n+1, 0); // Prefix sum vector
+        for(auto u = 0; u < n; u++){
+            dstrb_nnz_to_probe[u] = nz_to_probe[u].size();
+        }
+        std::partial_sum(dstrb_nnz_to_probe.begin(), dstrb_nnz_to_probe.end(), ps_dstrb_nnz_to_probe.begin()+1);
+        nnz_to_probe = ps_dstrb_nnz_to_probe[n]; // Total number of nz to probe
+        if(verbose) printf("[parallel_consensus_v8_cvc]\t\tNumber of edges to probe %d\n", nnz_to_probe );
+        if (nnz_to_probe == 0){
+            break;
+        }
+
+        // Get the size of the clusters in which each element belongs. 
+        // That is proportional to the amount of work to calculate Mua for each element
+        // Would be used to load balance parallel Mua computation
+        vector<int64_t> dstrb_work(n); 
+        vector<int64_t> ps_dstrb_work(n+1, 0); // Prefix sum vector
+        for(auto u = 0; u < n; u++){
+            dstrb_work[u] = (int64_t)clust_lst[clust_asn[u]].size();
+        }
+        std::partial_sum(dstrb_work.begin(), dstrb_work.end(), ps_dstrb_work.begin()+1);
+        int nsplit = std::min(nthread * 4, (int)n); // For better dynamic load balancing 4x more splits than the number of threads
+        int64_t work_per_split_expected = ps_dstrb_work[n] / nsplit;
+        vector<int> splitters(nsplit);
+
+        t0 = omp_get_wtime();
+        vector<int> Mua(n);
+#pragma omp parallel
+        {
+            int tid = omp_get_thread_num();
+#pragma omp for
+            for(uint32_t s = 0; s < nsplit; s++){
+                splitters[s] = std::lower_bound(ps_dstrb_work.begin(), ps_dstrb_work.end(), s * work_per_split_expected) - ps_dstrb_work.begin();
+            }
+#pragma omp for schedule(dynamic)
+            for(uint32_t s = 0; s < nsplit; s++){
+                uint32_t start_u = splitters[s];
+                uint32_t end_u = (s == nsplit-1) ? n : splitters[s+1];
+                for (uint32_t u = start_u; u < end_u; u++){
+                    Mua[u] = 0;
+                    if(nz_to_probe[u].size() > 0){
+                        uint32_t a = clust_asn[u];
+                        for(auto i = 0; i < clust_lst[a].size(); i++){
+                            uint32_t e = clust_lst[a][i];
+                            if(u != e){
+                                vector<bool> eq = ewise_equal<uint32_t>(C[u], C[e]);
+                                uint32_t sum = accumulate(eq.begin(), eq.end(), 0);
+                                Mua[u] += (k - 2 * sum);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        t1 = omp_get_wtime();
+        tSearch += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to compute Mua for all vertices %lf\n", t1-t0);
+
+        dstrb_work.resize(nnz_to_probe); 
+
+        // Unroll the list of list of nz into one list
+        vector< tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> >nz_to_probe_unrolled(nnz_to_probe);
+        for(auto u = 0; u < n; u++){
+            for(auto j = 0; j < nz_to_probe[u].size(); j++){
+                int idx = ps_dstrb_nnz_to_probe[u];
+                nz_to_probe_unrolled[idx+j] = tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t>(nz_to_probe[u][j]);
+                auto b = get<3>(nz_to_probe[u][j]);
+                dstrb_work[idx+j] = clust_lst[b].size();
+            }
+        }
+        ps_dstrb_work.resize(nnz_to_probe+1);
+        std::partial_sum(dstrb_work.begin(), dstrb_work.end(), ps_dstrb_work.begin()+1);
+        //cout << "Total work:" << ps_dstrb_work[nnz_to_probe] << endl;
+        nsplit = std::min(nthread * 4, (int)nnz_to_probe); // For better dynamic load balancing 4x more splits than the number of threads
+        work_per_split_expected = ps_dstrb_work[nnz_to_probe] / nsplit;
+        //printf("Expected work per split: %d\n", work_per_split_expected);
+        splitters.resize(nsplit);
+        t0 = omp_get_wtime();
+#pragma omp parallel
+        {
+            int tid = omp_get_thread_num();
+#pragma omp for
+            for(uint32_t s = 0; s < nsplit; s++){
+                splitters[s] = std::lower_bound(ps_dstrb_work.begin(), ps_dstrb_work.end(), s * work_per_split_expected) - ps_dstrb_work.begin();
+            }
+#pragma omp for schedule(dynamic)
+            for(uint32_t s = 0; s < nsplit; s++){
+                uint32_t start_idx = splitters[s];
+                uint32_t end_idx = (s == nsplit-1) ? nnz_to_probe : splitters[s+1];
+                for (uint32_t i = start_idx; i < end_idx; i++){
+                    auto u = get<0>(nz_to_probe_unrolled[i]);
+                    auto a = get<1>(nz_to_probe_unrolled[i]);
+                    auto v = get<2>(nz_to_probe_unrolled[i]);
+                    auto b = get<3>(nz_to_probe_unrolled[i]);
+                    auto w = get<4>(nz_to_probe_unrolled[i]);
+                    //printf("Thread %d; Probing movement of %d from cluster %d to cluster %d\n", tid, u, a, b);
+                    int Mub = 0;
+                    for(auto j = 0; j < clust_lst[b].size(); j++){
+                        auto e = clust_lst[b][j];
+                        vector<bool> eq = ewise_equal<uint32_t>(C[u], C[e]);
+                        uint32_t sum = accumulate(eq.begin(), eq.end(), 0);
+                        Mub += (k - 2 * sum);
+                    }
+
+                    // Edges use K_uv instead of k, so take their reductions out of both sums
+                    int reduction_b = reduction_to_probe[u][i - ps_dstrb_nnz_to_probe[u]];
+                    int deltaS = (Mub - reduction_b) - (Mua[u] - reduction_in_own_cluster[u]);
+                    // If current potential move gives best potential reduction in distance
+                    if (deltaS < pm.deltaS[u]){
+#pragma omp critical
+                        {
+                            pm.from[u] = a; // Mark potential move for u as moving from cluster a
+                            pm.to[u] = b; // Mark potential move for u as moving to cluster b
+                            pm.attractor[u] = v; // Mark potential move for u as it is attracted by v
+                            pm.deltaS[u] = deltaS; // Keep track of potential reduction in distance if this move takes place
+                            pm.valid[u] = true; // Initially mark this move to be a valid. It may become invalid after validation test
+                        }
+                    }
+                }
+            }
+        }
+        t1 = omp_get_wtime();
+        tSearch += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to figure out potential moves for all vertices %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+
+        // First validation pass:
+        // Is a move such that u moves to some cluster attracted by v while v moves to the cluster of u attracted by it?
+        // In that case one of those two moves would be invalid
+        t0 = omp_get_wtime();
+        for(uint32_t u = 0; u < n; u++){
+            if(pm.valid[u] == true){
+                auto v = pm.attractor[u];
+                if( (pm.valid[v] == true) && (pm.attractor[v] == u) ){
+                    if (pm.deltaS[u] <= pm.deltaS[v] ){
+                        pm.valid[v] = false;
+                        pm.deltaS[v] = 0;
+                    }
+                    else{
+                        pm.valid[u] = false;
+                        pm.deltaS[u] = 0;
+                    }
+                }
+
+            }
+        }
+        t1 = omp_get_wtime();
+        tValidate += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime for first validation pass %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+
+        // Second validation pass:
+        // If same set of vertices are moving then total potential reduction in distance should be lower than the previous iteration
+        // Main a flag to denote if any move passed the validation tests
+        bool flag = false; // Initially mark as none
+        t0 = omp_get_wtime();
+        vector<bool> neq = ewise_not_equal<bool>(pm.valid, last_valid);
+        uint32_t sum = accumulate(neq.begin(), neq.end(), 0);
+        if(sum == 0){
+            // Same set of vertices are being moved as in the previous iteration
+            if( accumulate(pm.deltaS.begin(), pm.deltaS.end(), 0) < accumulate(last_deltaS.begin(), last_deltaS.end(), 0) ){
+                last_valid = pm.valid;
+                last_deltaS = pm.deltaS;
+                flag = true;
+            }
+            else{
+                //Keep the flag false to denote no valid move this iteration
+                flag = false;
+            }
+        }
+        else{
+            last_valid = pm.valid;
+            last_deltaS = pm.deltaS;
+            flag = true;
+        }
+        t1 = omp_get_wtime();
+        tValidate += (t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime for second validation pass %lf\n", t1-t0);
+        if(verbose) printf("[parallel_consensus_v8_cvc]\t\tNumber of valid moves %d\n", accumulate(pm.valid.begin(), pm.valid.end(), 0) );
+
+        // Perform moves
+        if(flag == true){
+            t0 = omp_get_wtime();
+            for(uint32_t u = 0; u < n; u++){
+                if (pm.valid[u] == true){
+                    auto b = pm.to[u];
+                    clust_asn[u] = b;
+                }
+            }
+            relabel_clust_asn(clust_asn);
+            clust_lst = clust_asn_to_lst(clust_asn);
+            t1 = omp_get_wtime();
+            tMove += t1-t0;
+            if(verbose) printf("[parallel_consensus_v8_cvc]\tTime for vertex movement %lf\n", t1-t0);
+        }
+        else{
+            break;
+        }
+        if(verbose) printf("[parallel_consensus_v8_cvc]\tNumber of clusters %d\n", clust_lst.size() );
+    }
+
+    t3 = omp_get_wtime();
+    if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to reach consensus %lf\n", t3-t2 );
+    if(verbose) printf("[parallel_consensus_v8_cvc]\t\ttInit %lf\n", tInit );
+    if(verbose) printf("[parallel_consensus_v8_cvc]\t\ttSearch %lf\n", tSearch );
+    if(verbose) printf("[parallel_consensus_v8_cvc]\t\ttValidate %lf\n", tValidate );
+    if(verbose) printf("[parallel_consensus_v8_cvc]\t\ttMove %lf\n", tMove );
 
     return clust_asn;
 }

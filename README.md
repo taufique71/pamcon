@@ -79,6 +79,32 @@ _core.set_num_threads(8)   # use 8 threads
 result = pamcon.consensus(G, clusterings)
 ```
 
+### Discounting singleton votes (`v8-cvc`)
+
+An input clustering that leaves a vertex alone in a singleton cluster still counts as a vote
+against joining that vertex with its neighbors. The experimental `v8-cvc` algorithm reduces
+this effect for pairs connected by an edge in the graph:
+
+```python
+result = pamcon.consensus(G, clusterings, alg="v8-cvc", max_singleton_votes=3)
+```
+
+For a pair of vertices `(u, v)` with an edge, let `s` be the number of input clusterings in
+which `u` or `v` is a singleton. `v8-cvc` ignores up to `max_singleton_votes` of those `s` votes.
+Pairs without an edge are treated the same as in the default algorithm.
+
+| `max_singleton_votes` | Behavior |
+|---|---|
+| `0` | Same as the default algorithm |
+| Between `0` and `k` | Ignores up to that many singleton votes per edge |
+| `k` or higher | Ignores all singleton votes on edges |
+
+Notes:
+- `max_singleton_votes` is required for `v8-cvc`, and it can't be used with the default algorithm.
+- Cluster IDs must be in the range `0` to `n-1`.
+- With `max_singleton_votes` above 0, the algorithm no longer strictly minimizes the total
+  Rand distance to the input clusterings.
+
 ### Examples
 
 - **`example.py`** — Simple example using the karate club graph with label propagation and Louvain clusterings
@@ -143,6 +169,8 @@ make consensus
             --k <number_of_clusterings> \
             --output-prefix <output_prefix> \
             [--niter 100] \
+            [--alg v8] \
+            [--max-singleton-votes <int>] \
             [--verbose]
 ```
 
@@ -155,6 +183,8 @@ make consensus
 | `--k` | Yes | Number of input clusterings |
 | `--output-prefix` | Yes | Path prefix for output file |
 | `--niter` | No | Maximum number of iterations (default: 100) |
+| `--alg` | No | Algorithm to use: `v8` or `v8-cvc` (default: `v8`) |
+| `--max-singleton-votes` | For `v8-cvc` | Maximum singleton votes to ignore per edge |
 | `--verbose` | No | Print detailed progress per iteration |
 | `--help` | No | Show usage message |
 
@@ -205,7 +235,7 @@ This requires [igraph](https://igraph.org/c/doc/igraph-Installation.html) — up
 
 ```
 pamcon/          ← Python package (pip installable)
-consensus.h      ← Core algorithm: parallel_consensus_v8
+consensus.h      ← Core algorithms: parallel_consensus_v8, parallel_consensus_v8_cvc
 main_user.cpp    ← CLI entry point (no external dependencies)
 main.cpp         ← Research CLI entry point (requires igraph)
 example.py       ← Simple usage example

@@ -2,6 +2,8 @@
 #include <pybind11/numpy.h>
 
 #include <vector>
+#include <string>
+#include <stdexcept>
 #include <cstdint>
 #include <omp.h>
 
@@ -20,8 +22,17 @@ py::array_t<uint32_t> consensus_binding(
     uint32_t ncols,
     py::array_t<uint32_t, py::array::c_style | py::array::forcecast> C_array,
     int niter,
-    bool verbose
+    bool verbose,
+    const std::string& alg,
+    int max_singleton_votes
 ) {
+    if (alg != "v8" && alg != "v8-cvc") {
+        throw std::invalid_argument("Unknown algorithm '" + alg + "'. Expected 'v8' or 'v8-cvc'.");
+    }
+    if (alg == "v8" && max_singleton_votes != -1) {
+        throw std::invalid_argument("max_singleton_votes only applies to alg='v8-cvc'.");
+    }
+
     auto col_ptr_buf = col_ptr.request();
     auto row_ids_buf = row_ids.request();
     auto values_buf  = values.request();
@@ -60,7 +71,13 @@ py::array_t<uint32_t> consensus_binding(
     }
 
     // Run parallel consensus
-    vector<uint32_t> result = parallel_consensus_v8(graph, C, niter, verbose);
+    vector<uint32_t> result;
+    if (alg == "v8-cvc") {
+        result = parallel_consensus_v8_cvc(graph, C, max_singleton_votes, niter, verbose);
+    }
+    else {
+        result = parallel_consensus_v8(graph, C, niter, verbose);
+    }
 
     // Return result as 1D numpy array
     py::array_t<uint32_t> result_array(nrows);
@@ -89,6 +106,8 @@ PYBIND11_MODULE(_core, m) {
           py::arg("ncols"),
           py::arg("C"),
           py::arg("niter") = 100,
-          py::arg("verbose") = false
+          py::arg("verbose") = false,
+          py::arg("alg") = "v8",
+          py::arg("max_singleton_votes") = -1
     );
 }

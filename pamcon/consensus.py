@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.sparse as sp
 
-def consensus(graph, clusterings, niter=100, verbose=False):
+def consensus(graph, clusterings, niter=100, verbose=False, alg="v8", max_singleton_votes=None):
     """
     Compute consensus clustering from multiple input clusterings.
 
@@ -19,6 +19,14 @@ def consensus(graph, clusterings, niter=100, verbose=False):
         Maximum number of iterations (default: 100).
     verbose : bool, optional
         Print per-iteration progress (default: False).
+    alg : {"v8", "v8-cvc"}, optional
+        Algorithm to use (default: "v8").
+    max_singleton_votes : int, optional
+        Required for alg="v8-cvc", and must be >= 0. Maximum number of singleton
+        votes to ignore per graph edge. A pair (u, v) with an edge uses
+        K_uv = k - min(s_uv, max_singleton_votes) in place of k, where s_uv is the
+        number of input clusterings in which u or v is a singleton cluster.
+        For alg="v8-cvc", cluster IDs must be in the range 0 to n-1.
 
     Returns
     -------
@@ -95,7 +103,9 @@ def consensus(graph, clusterings, niter=100, verbose=False):
                 C[idx, j] = np.uint32(cluster_id)
 
     # --- Call C++ binding ---
-    result = _core.consensus(col_ptr, row_ids, values, n, n, C, niter, verbose)
+    if max_singleton_votes is None:
+        max_singleton_votes = -1
+    result = _core.consensus(col_ptr, row_ids, values, n, n, C, niter, verbose, alg, max_singleton_votes)
 
     # --- Map result back to original node IDs ---
     if idx_to_node is not None:

@@ -22,6 +22,8 @@ void print_help(const char* prog) {
     printf("  --k <int>                 Number of input clusterings\n");
     printf("  --output-prefix <prefix>  Path prefix for output file\n\n");
     printf("Optional arguments:\n");
+    printf("  --alg <name>              Algorithm to use: v8 or v8-cvc (default: v8)\n");
+    printf("  --max-singleton-votes <int>  Maximum singleton votes to ignore per edge (required for v8-cvc)\n");
     printf("  --niter <int>             Maximum number of iterations (default: 100)\n");
     printf("  --verbose                 Print detailed progress per iteration\n");
     printf("  --help, -h                Show this help message\n\n");
@@ -46,6 +48,8 @@ int main(int argc, char* argv[]) {
     string output_prefix;
     int niter = 100;
     bool verbose = false;
+    string alg = "v8";
+    int max_singleton_votes = -1;
 
     for (int i = 1; i < argc; i++) {
         if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0) {
@@ -72,6 +76,14 @@ int main(int argc, char* argv[]) {
             if (i+1 >= argc) { fprintf(stderr, "Error: --niter requires a value.\n"); return 1; }
             niter = atoi(argv[++i]);
         }
+        else if (strcmp(argv[i], "--alg") == 0) {
+            if (i+1 >= argc) { fprintf(stderr, "Error: --alg requires a value.\n"); return 1; }
+            alg = string(argv[++i]);
+        }
+        else if (strcmp(argv[i], "--max-singleton-votes") == 0) {
+            if (i+1 >= argc) { fprintf(stderr, "Error: --max-singleton-votes requires a value.\n"); return 1; }
+            max_singleton_votes = atoi(argv[++i]);
+        }
         else if (strcmp(argv[i], "--verbose") == 0) {
             verbose = true;
         }
@@ -90,6 +102,18 @@ int main(int argc, char* argv[]) {
     if (output_prefix.empty()) { fprintf(stderr, "Error: --output-prefix is required.\n"); ok = false; }
     if (!ok) {
         fprintf(stderr, "Run '%s --help' for usage.\n", argv[0]);
+        return 1;
+    }
+    if (alg != "v8" && alg != "v8-cvc") {
+        fprintf(stderr, "Error: Unknown algorithm '%s'. Expected v8 or v8-cvc.\n", alg.c_str());
+        return 1;
+    }
+    if (alg == "v8-cvc" && max_singleton_votes < 0) {
+        fprintf(stderr, "Error: v8-cvc requires --max-singleton-votes with a value >= 0.\n");
+        return 1;
+    }
+    if (alg == "v8" && max_singleton_votes != -1) {
+        fprintf(stderr, "Error: --max-singleton-votes only applies to v8-cvc.\n");
         return 1;
     }
     if (niter < 1) {
@@ -146,10 +170,16 @@ int main(int argc, char* argv[]) {
     }
 
     // Run consensus
-    printf("Running consensus (max %d iterations, %d thread(s)) ...\n",
-           niter, omp_get_max_threads());
+    printf("Running consensus with %s (max %d iterations, %d thread(s)) ...\n",
+           alg.c_str(), niter, omp_get_max_threads());
     double t0 = omp_get_wtime();
-    vector<uint32_t> result = parallel_consensus_v8(graph, C, niter, verbose);
+    vector<uint32_t> result;
+    if (alg == "v8-cvc") {
+        result = parallel_consensus_v8_cvc(graph, C, max_singleton_votes, niter, verbose);
+    }
+    else {
+        result = parallel_consensus_v8(graph, C, niter, verbose);
+    }
     double t1 = omp_get_wtime();
 
     int kcons = *(max_element(result.begin(), result.end())) + 1;
