@@ -23,7 +23,7 @@ def consensus(graph, clusterings, niter=100, verbose=False, alg="v8", max_single
         Algorithm to use (default: "v8").
     max_singleton_votes : int, optional
         Required for alg="v8-cvc", and must be >= 0. Maximum number of singleton
-        votes to ignore per graph edge. A pair (u, v) with an edge uses
+        votes to ignore per vertex pair. A pair (u, v) uses
         K_uv = k - min(s_uv, max_singleton_votes) in place of k, where s_uv is the
         number of input clusterings in which u or v is a singleton cluster.
         For alg="v8-cvc", cluster IDs must be in the range 0 to n-1.

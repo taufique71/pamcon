@@ -11,7 +11,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR   = os.path.join(SCRIPT_DIR, "prototype-tests/LFR/n5000")
 PREFIX     = os.path.join(DATA_DIR, "LFR_n5000_mu04_gamma30_beta11")
 K          = 16   # number of input clusterings to use (.0 through .15)
-MAX_SINGLETON_VOTES = 3   # maximum singleton votes to ignore per graph edge
+MAX_SINGLETON_VOTES = 3   # maximum singleton votes to ignore per vertex pair
 
 # --- Load graph as scipy sparse matrix ---
 print("Loading LFR benchmark graph (n=5000, mu=0.4) ...")

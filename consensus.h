@@ -813,12 +813,11 @@ vector<uint32_t> parallel_consensus_v8(CSC<uint32_t, uint32_t, uint32_t> &graph,
 }
 
 /*
- * Parallel consensus clustering that discounts singleton votes on graph edges
+ * Parallel consensus clustering that discounts singleton votes
  * Input: graph, cluster assignment matrix and max_singleton_votes
  *
  * Same as parallel_consensus_v8, except for the term used for a pair (u, v) in deltaS:
- *      edge in the graph: K_uv - 2 * agree(u, v), where K_uv = k - min(s_uv, max_singleton_votes)
- *      no edge:           k - 2 * agree(u, v)
+ *      K_uv - 2 * agree(u, v), where K_uv = k - min(s_uv, max_singleton_votes)
  * s_uv is the number of input partitions in which u or v is a singleton cluster.
  * max_singleton_votes = 0 gives the same terms as parallel_consensus_v8.
  * */
@@ -896,8 +895,8 @@ vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &gr
     if(verbose) printf("[parallel_consensus_v8_cvc] Time to prepare the consensus graph: %lf\n", t1-t0);
 
     /*
-     * For every edge (u, v) find how much K_uv is lower than k: min(s_uv, max_singleton_votes)
-     * Stored at the same position as the edge in the consensus graph
+     * Find which vertices are singletons in which input partition
+     * s_uv of a pair (u, v) is computed from these whenever the pair is scored
      * */
     t0 = omp_get_wtime();
     vector< vector<bool> > is_singleton(n, vector<bool>(k, false));
@@ -911,22 +910,8 @@ vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &gr
             is_singleton[u][j] = (clust_size[C[u][j]] == 1);
         }
     }
-
-    vector<int> edge_reduction(csc.get_nnz(), 0);
-    for(uint32_t u = 0; u < n; u++){
-        for(uint32_t i = (*csc.get_colPtr())[u]; i < (*csc.get_colPtr())[u+1]; i++){
-            uint32_t v = (*csc.get_rowIds())[i];
-            int s = 0;
-            for(uint32_t j = 0; j < k; j++){
-                if(is_singleton[u][j] || is_singleton[v][j]) s++;
-            }
-            edge_reduction[i] = std::min(s, max_singleton_votes);
-        }
-    }
     t1 = omp_get_wtime();
-    if(verbose) printf("[parallel_consensus_v8_cvc] Time to prepare edge reductions: %lf\n", t1-t0);
-
-    vector<int> reduction_by_cluster(n, 0); // Working array, all zeros between uses
+    if(verbose) printf("[parallel_consensus_v8_cvc] Time to find singletons: %lf\n", t1-t0);
 
     if(verbose) csc.PrintInfo();
     const pvector<uint32_t>* colPtr = csc.get_colPtr();
@@ -1003,32 +988,6 @@ vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &gr
         tSearch += (t1-t0);
         if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to figure out edges to be probed %lf\n", t1-t0);
 
-        // For each vertex u, add up the edge reductions per neighboring cluster
-        // reduction_to_probe[u][j] belongs to the cluster of nz_to_probe[u][j]
-        // reduction_in_own_cluster[u] belongs to the current cluster of u
-        t0 = omp_get_wtime();
-        vector< vector<int> > reduction_to_probe(n);
-        vector<int> reduction_in_own_cluster(n, 0);
-        for(uint32_t u = 0; u < n; u++){
-            for(uint32_t j = (*colPtr)[u]; j < (*colPtr)[u+1]; j++){
-                uint32_t v = (*rowIds)[j];
-                if(u != v){ // A vertex never pairs with itself in deltaS, so skip self-loops
-                    reduction_by_cluster[clust_asn[v]] += edge_reduction[j];
-                }
-            }
-            reduction_in_own_cluster[u] = reduction_by_cluster[clust_asn[u]];
-            reduction_to_probe[u].resize(nz_to_probe[u].size());
-            for(auto j = 0; j < nz_to_probe[u].size(); j++){
-                reduction_to_probe[u][j] = reduction_by_cluster[get<3>(nz_to_probe[u][j])];
-            }
-            for(uint32_t j = (*colPtr)[u]; j < (*colPtr)[u+1]; j++){
-                reduction_by_cluster[clust_asn[(*rowIds)[j]]] = 0;
-            }
-        }
-        t1 = omp_get_wtime();
-        tSearch += (t1-t0);
-        if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to add up edge reductions %lf\n", t1-t0);
-
         // Get the distribution of number of edges to probe per vertex
         // Would be used to prepare the vector of edges to probe
         std::vector<int64_t> dstrb_nnz_to_probe(n);
@@ -1078,14 +1037,18 @@ vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &gr
                             if(u != e){
                                 vector<bool> eq = ewise_equal<uint32_t>(C[u], C[e]);
                                 uint32_t sum = accumulate(eq.begin(), eq.end(), 0);
-                                Mua[u] += (k - 2 * sum);
+                                int s = 0;
+                                for(uint32_t m = 0; m < k; m++){
+                                    if(is_singleton[u][m] || is_singleton[e][m]) s++;
+                                }
+                                Mua[u] += (int)k - std::min(s, max_singleton_votes) - 2 * (int)sum;
                             }
                         }
                     }
                 }
             }
         }
-        
+
         t1 = omp_get_wtime();
         tSearch += (t1-t0);
         if(verbose) printf("[parallel_consensus_v8_cvc]\tTime to compute Mua for all vertices %lf\n", t1-t0);
@@ -1133,12 +1096,14 @@ vector<uint32_t> parallel_consensus_v8_cvc(CSC<uint32_t, uint32_t, uint32_t> &gr
                         auto e = clust_lst[b][j];
                         vector<bool> eq = ewise_equal<uint32_t>(C[u], C[e]);
                         uint32_t sum = accumulate(eq.begin(), eq.end(), 0);
-                        Mub += (k - 2 * sum);
+                        int s = 0;
+                        for(uint32_t m = 0; m < k; m++){
+                            if(is_singleton[u][m] || is_singleton[e][m]) s++;
+                        }
+                        Mub += (int)k - std::min(s, max_singleton_votes) - 2 * (int)sum;
                     }
 
-                    // Edges use K_uv instead of k, so take their reductions out of both sums
-                    int reduction_b = reduction_to_probe[u][i - ps_dstrb_nnz_to_probe[u]];
-                    int deltaS = (Mub - reduction_b) - (Mua[u] - reduction_in_own_cluster[u]);
+                    int deltaS = Mub - Mua[u];
                     // If current potential move gives best potential reduction in distance
                     if (deltaS < pm.deltaS[u]){
 #pragma omp critical

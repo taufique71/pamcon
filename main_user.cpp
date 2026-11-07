@@ -23,7 +23,7 @@ void print_help(const char* prog) {
     printf("  --output-prefix <prefix>  Path prefix for output file\n\n");
     printf("Optional arguments:\n");
     printf("  --alg <name>              Algorithm to use: v8 or v8-cvc (default: v8)\n");
-    printf("  --max-singleton-votes <int>  Maximum singleton votes to ignore per edge (required for v8-cvc)\n");
+    printf("  --max-singleton-votes <int>  Maximum singleton votes to ignore per vertex pair (required for v8-cvc)\n");
     printf("  --niter <int>             Maximum number of iterations (default: 100)\n");
     printf("  --verbose                 Print detailed progress per iteration\n");
     printf("  --help, -h                Show this help message\n\n");
